@@ -56,12 +56,18 @@ obliki *tidy data*.
 
 Spodnji graf prikazuje strukturo religij v sloveniji (placeholder).
 
-```{r histogram, echo=FALSE, message=FALSE, fig.align='center', fig.cap='Bar plot slovenske verske strukture'}
-svn <- relig %>% filter(country == "Slovenia") %>%
-  select(-"country") %>%
-  gather(religion, number)
-ggplot(svn, aes(x=religion, y=number)) + geom_bar(stat="identity") +
-  ggtitle("Religije v sloveniji") + xlab("Religija") + ylab("Število vernikov")
+```{r histogram, echo=FALSE, message=FALSE, fig.align='center', fig.cap='Slovenska migracija'}
+sloIZ <- poSpolih %>% filter(origin_country == "Slovenia") %>% select(-"origin_country") %>%
+  group_by(gender, decade) %>% summarise(izselitev = sum(number, na.rm = TRUE))
+sloV <- poSpolih %>% filter(dest_country == "Slovenia") %>% select(-"dest_country") %>%
+  group_by(gender, decade) %>% summarise(vselitev = sum(number, na.rm = TRUE))
+svn <- inner_join(sloIZ, sloV, by = c("gender", "decade"))
+svn$izselitev <- svn$izselitev * (-1)
+ggplot(svn, aes(x = decade, y = vselitev, fill = gender)) + 
+  geom_bar(stat = "identity", position=position_dodge(), color = "black") + 
+  geom_bar(aes(x = decade, y = izselitev), stat = "identity", position=position_dodge(), color = "black") +
+  xlab("Desetletje")
+  
 ```
 
 ***
@@ -70,6 +76,11 @@ ggplot(svn, aes(x=religion, y=number)) + geom_bar(stat="identity") +
 
 ```{r vizualizacija, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 source("vizualizacija/vizualizacija.r", encoding="UTF-8")
+```
+
+```{r graf, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+ggplot(kolicina %>% filter(country != "United States"), aes(x = BDP, y = priselitev, color = gender)) + 
+  geom_point() + ggtitle("Povezava med priseljevanjem v državo in BDP") 
 ```
 
 Spodnji zemljevid prikazuje emigracijo iz svetovnih držav v zadnjih petdesetih letih.
