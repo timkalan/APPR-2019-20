@@ -23,8 +23,20 @@ prihodS <- poSpolih %>% group_by(dest_country, decade, gender) %>%
 netoSpoli <- inner_join(izhodS, prihodS, by = c("country", "decade", "gender")) %>%
   mutate(neto_imigracija = prihod - izhod)
 
+kolicina <- netoSpoli %>% group_by(country, gender) %>%
+  summarise(priselitev = sum(prihod, na.rm = TRUE))
+
+rm(prihod, izhod, izhodS, prihodS)
 
 # GRAFI
+
+desetletja <- ggplot(neto, aes(x = decade, y = neto_imigracija)) + geom_point()
+
+# se izkaže za nezanimiv graf
+kolicina <- kolicina %>% inner_join(bdp %>% filter(leto == 2000), by = c("country")) %>%
+  select(-"leto") 
+kolicina <- arrange(kolicina, BDP)
+
 
 # # primerjava izseljevanja v Afganistanu glede na spol (igranje)
 # 
@@ -43,11 +55,6 @@ netoSpoli <- inner_join(izhodS, prihodS, by = c("country", "decade", "gender")) 
 
 
 # ZEMLJEVIDI
-
-# svet <- uvozi.zemljevid("http://thematicmapping.org/downloads/TM_WORLD_BORDERS-0.3.zip", "TM_WORLD_BORDERS-0.3")
-svet <- uvozi.zemljevid("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
-                        "ne_50m_admin_0_countries", encoding="UTF-8")
-
 data("World") #če ne ne dela
 
 sve <- World %>% rename(country = name)
