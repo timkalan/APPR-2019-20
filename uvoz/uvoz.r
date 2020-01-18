@@ -76,12 +76,20 @@ relig[, 1] <- sapply(relig[, 1], as.character)
 rm(devetdeseta, dvadeseta, dvatisoca, migracija, osemdeseta, stran, bdpji, url)
 
 
+#ZEMLJEVID
+svet <- uvozi.zemljevid("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
+                        "ne_50m_admin_0_countries", encoding="UTF-8")
+# svet <- uvozi.zemljevid("http://thematicmapping.org/downloads/TM_WORLD_BORDERS-0.3.zip", "TM_WORLD_BORDERS-0.3")
+
+
 # popravljanje imen držav (to lahko bolje napišeš)
 bdp$country <- standardize.countrynames(bdp$country, suggest = "auto", print.changes = FALSE)
 pop$country <- standardize.countrynames(pop$country, suggest = "auto", print.changes = FALSE)
 poSpolih$origin_country <- standardize.countrynames(poSpolih$origin_country, suggest = "auto", print.changes = FALSE)
 poSpolih$dest_country <- standardize.countrynames(poSpolih$dest_country, suggest = "auto", print.changes = FALSE)
 relig$country <- standardize.countrynames(relig$country, suggest = "auto", print.changes = FALSE)
+
+
 
 
 # # 2. faza: Uvoz podatkov
