@@ -26,7 +26,8 @@ source("lib/rstudio.r", encoding="UTF-8")
 
 # Izbira teme
 
-Spodaj je prikazanih nekaj podatkov o migraciji po svetu.
+Spodaj je prikazanih nekaj podatkov o migraciji po svetu. Zajeta je večina svetovnih držav (za nekatere enostavno
+ni vseh podatkov) in obdobje od leta 1960 do 2010 (razpon podatkov o migraciji).
 
 ![](slike/migracija.jpg)
 
@@ -36,9 +37,9 @@ Spodaj je prikazanih nekaj podatkov o migraciji po svetu.
 source("uvoz/uvoz.r", encoding="UTF-8")
 ```
 
-Uvozili smo podatke o migraciji, populaciji, religiji v obliki CSV iz raznih spletnih strani (navedenih v README-ju), 
-poleg tega pa še podatke o BDP-ju držav skozi čas v obliki HTML iz Wikipedije. Podatke imamo v x razpredelnicah v 
-obliki *tidy data*.
+Uvozili smo podatke o migraciji, populaciji, religiji in izobrazbi v obliki CSV iz raznih spletnih strani (navedenih v README-ju), 
+poleg tega pa še podatke o BDP-ju držav skozi čas v obliki HTML iz Wikipedije. Podatke imamo v dveh razpredelnicah v 
+obliki *tidy data*. 
 
 1. `poSpolih` - podatki o migraciji ljudi
   - `origin_country` - spremenljivka: ime države, iz katere so se ljudje izseljevali (besedilo),
@@ -46,15 +47,20 @@ obliki *tidy data*.
   - `gender` - spremenljivka: spol izseljenca (oz. priseljenca) (besedilo),
   - `decade` - spremenljivka: desetletje, v katerem se je preseljevanje dogajalo (besedilo),
   - `number` - meritev: število ljudi, ki se je preselilo iz origin v dest v desetletju decade (število: med 0 in 5200000).
-  
-2. `BDP` - podatki o BDP vseh držav
+
+2. `drzave` - podatki o skoraj vseh svetovnih državah
   - `drzava` - spremenljivka: ime države (besedilo),
-  - `leto` - spremenljivka: leto, za katerega je BDP izračunan (število: med 1980 in 2019, ustrezno leto),
-  - `BDP` - meritev: Bruto domači proizvod, prilagojen na cene (število: med 0 in 28000000000 v dolarjih).
+  - `leto` - spremenljivka: leto, na kateregea se podatek navezuje (število: med 1980 in 2019, ustrezno leto),
+  - `BDP` - meritev: Bruto domači proizvod, prilagojen na cene (število: med 0 in 28000000000 v dolarjih),
+  - `populacija` - meritev: Populacija posamezne države (oz. ocena, kjer točna vrednost ni na voljo) (število),
+  - `izobrazba` - meritev: Indeks izobraženosti za posamezne države (število: med 0 in 1), 
+  - `religija` - meritev: Po en stolpec za vsako religijo (število: pomeni število vernih prebivalcev).
 
-**Opomba**: preveri, če je res vse tidy.
+**Opomba**: V tabeli države nastopa več meritev, zato morda ni najbolj *tidy data* (morda dodaš kakšne indekse?).
+            Nekateri podatki niso vezani na leta (npr. verska struktura), njihove vrednosti so bile privzete za
+            konstantne skozi celotno obdobje.
 
-Spodnji graf prikazuje strukturo religij v sloveniji (placeholder).
+Spodnji graf prikazuje migracijo v sloveniji v zadnjih petdesetih letih (placeholder?).
 
 ```{r histogram, echo=FALSE, message=FALSE, fig.align='center', fig.cap='Slovenska migracija'}
 sloIZ <- poSpolih %>% filter(origin_country == "Slovenia") %>% select(-"origin_country") %>%
@@ -66,7 +72,7 @@ svn$izselitev <- svn$izselitev * (-1)
 ggplot(svn, aes(x = decade, y = vselitev, fill = gender)) + 
   geom_bar(stat = "identity", position=position_dodge(), color = "black") + 
   geom_bar(aes(x = decade, y = izselitev), stat = "identity", position=position_dodge(), color = "black") +
-  xlab("Desetletje")
+  xlab("Desetletje") + ylab("izselitev/vselitev")
   
 ```
 
@@ -78,14 +84,17 @@ ggplot(svn, aes(x = decade, y = vselitev, fill = gender)) +
 source("vizualizacija/vizualizacija.r", encoding="UTF-8")
 ```
 
+Graf prikazuje povezavo med BDP-jem države in število priseljencev (skupno), ker pa ni moč opaziti
+močne korelacije, bo po vsej verjetnosti zamenjan.
+
 ```{r graf, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 ggplot(kolicina %>% filter(country != "United States"), aes(x = BDP, y = priselitev, color = gender)) + 
   geom_point() + ggtitle("Povezava med priseljevanjem v državo in BDP") 
 ```
 
-Spodnji zemljevid prikazuje emigracijo iz svetovnih držav v zadnjih petdesetih letih.
+Spodnji zemljevid prikazuje države, razvrščene po številu priseljencev skozi celotno obdobje.
 
-```{r zemljevid, echo=FALSE, fig.align='center', fig.cap='Zemljevid izseljevanja iz držav'}
+```{r zemljevid, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center', fig.cap='Zemljevid izseljevanja iz držav'}
 zemPriselitev
 ```
 
