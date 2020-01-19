@@ -55,20 +55,22 @@ kolicina <- arrange(kolicina, BDP)
 
 
 # ZEMLJEVIDI
-data("World") #če ne ne dela
+# data("World") #če ne ne dela
+# sve <- World %>% rename(country = name)
+# sve$country <- standardize.countrynames(sve$country, suggest = "auto", print.changes = FALSE)
+# sve <- sve %>% inner_join(neto, by=c("country"))
+# 
+# tm_shape(sve) + tm_polygons("izhod")
+# 
+# eu <- World %>% filter(continent == "Europe") %>%
+#   rename(country = name) %>%
+#   inner_join(neto, by=c("country"))
+# 
+# tm_shape(eu) + tm_polygons("izhod")
 
-sve <- World %>% rename(country = name)
-sve$country <- standardize.countrynames(sve$country, suggest = "auto", print.changes = FALSE)
-sve <- sve %>% inner_join(neto, by=c("country"))
-
-tm_shape(sve) + tm_polygons("izhod")
-
-eu <- World %>% filter(continent == "Europe") %>%
-  rename(country = name) %>%
-  inner_join(neto, by=c("country"))
-
-tm_shape(eu) + tm_polygons("izhod")
-
+svet$NAME <- standardize.countrynames(svet$NAME, suggest = "auto", print.changes = FALSE)
+zemPriselitev <- tm_shape(merge(svet, kolicina %>% group_by(country, BDP) %>% 
+                 summarise(priselitev = sum(priselitev, na.rm = TRUE)), by.x = "NAME", by.y = "country")) + tm_polygons("priselitev")
 
 # # 3. faza: Vizualizacija podatkov
 # 

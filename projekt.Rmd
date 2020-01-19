@@ -86,7 +86,7 @@ ggplot(kolicina %>% filter(country != "United States"), aes(x = BDP, y = priseli
 Spodnji zemljevid prikazuje emigracijo iz svetovnih držav v zadnjih petdesetih letih.
 
 ```{r zemljevid, echo=FALSE, fig.align='center', fig.cap='Zemljevid izseljevanja iz držav'}
-tm_shape(sve) + tm_polygons("izhod")
+zemPriselitev
 ```
 
 ***
