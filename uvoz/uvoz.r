@@ -45,7 +45,7 @@ dvatisoca <- dvatisoca %>% gather(leto, BDP, "2000":"2009")
 dvadeseta <- dvadeseta %>% gather(leto, BDP, "2010":"2019")
 
 bdp <- rbind(osemdeseta, devetdeseta, dvatisoca, dvadeseta)
-bdp$BDP <- bdp$BDP * 1000
+bdp$BDP <- bdp$BDP * 1000000
 bdp[, 2] <- sapply(bdp[, 2], as.numeric)
 
 
@@ -59,9 +59,10 @@ pop[, 2:72] <- as.data.frame(apply(pop[, 2:72],2,function(x)gsub('\\s+', '',x)))
 pop[, 1:72] <- sapply(pop[, 1:72], as.character)
 pop[, 2:72] <- sapply(pop[, 2:72], as.numeric)
 pop <- arrange(pop, country)
-pop <- pop[, c(1, 12:62)]
-pop <- pop %>% gather(leto, populacija, "1960":"2010")
+pop <- pop[, c(1, 12:72)]
+pop <- pop %>% gather(leto, populacija, "1960":"2020")
 pop$populacija <- pop$populacija * 1000
+pop$leto <- as.numeric(pop$leto)
 
 
 # RELIGIJE ####
@@ -75,16 +76,14 @@ religije[, 1] <- sapply(religije[, 1], as.character)
 izobrazba <- read_csv("podatki/education_index.csv", skip = 1, n_max = 189, na = c(".."))
 izobrazba <- Filter(function(x)!all(is.na(x)), izobrazba)
 izobrazba$`HDI Rank (2018)` <- NULL
-izobrazba <- gather(izobrazba, leto, indeks, "1990":"2018")
+izobrazba <- gather(izobrazba, leto, izobrazenost, "1990":"2018")
+izobrazba$leto <- as.numeric(izobrazba$leto)
 
 hdi <- read_csv("podatki/hdi.csv", skip = 1, n_max = 189, na = c(".."))
 hdi <- Filter(function(x)!all(is.na(x)), hdi)
 hdi$`HDI Rank (2018)` <- NULL
 hdi <- gather(hdi, leto, HDI, "1990":"2018")
-
-
-# DRZAVE ####
-drzave <- NULL
+hdi$leto <- as.numeric(hdi$leto)
 
 
 # popravljanje imen ####
@@ -98,9 +97,18 @@ skupno$dest_country <- standardize.countrynames(skupno$dest_country, suggest = "
 religije$country <- standardize.countrynames(religije$country, suggest = "auto", print.changes = FALSE)
 izobrazba$Country <- standardize.countrynames(izobrazba$Country, suggest = "auto", print.changes = FALSE)
 hdi$Country <- standardize.countrynames(hdi$Country, suggest = "auto", print.changes = FALSE)
+svet$NAME <- standardize.countrynames(svet$NAME, suggest = "auto", print.changes = FALSE)                                      
 
 
-rm(devetdeseta, dvadeseta, dvatisoca, migracija, osemdeseta, stran, bdpji, url)
+# DRZAVE ####
+drzave <- filter(bdp, leto > 1989 & leto < 2019) %>%
+  inner_join(pop %>% filter(leto > 1989 & leto < 2019), by = c("country", "leto")) %>%
+  inner_join(izobrazba, by = c("country" = "Country", "leto")) %>%
+  inner_join(hdi, by = c("country" = "Country", "leto")) %>%
+  mutate(BDPpc=BDP/populacija)
+
+
+rm(devetdeseta, dvadeseta, dvatisoca, migracija, osemdeseta, stran, bdpji, url, bdp, izobrazba, hdi, pop)
 
 
 # ZEMLJEVID ####
