@@ -1,3 +1,9 @@
+#stock <- read_xlsx("podatki/UNstock.xlsx", sheet = 2, skip = 15)
+#stockT <- filter(stock[,1:23], stock$...6 != NA)
+
+
+
+
 
 # MIGRACIJA ####
 migracija <- read_csv("podatki/migracija.csv", n_max = 160776, na = c("..")) %>%
