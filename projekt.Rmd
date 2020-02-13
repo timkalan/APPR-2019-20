@@ -51,14 +51,27 @@ obliki *tidy data*.
 2. `drzave` - podatki o skoraj vseh svetovnih državah
   - `drzava` - spremenljivka: ime države (besedilo),
   - `leto` - spremenljivka: leto, na kateregea se podatek navezuje (število: med 1980 in 2019, ustrezno leto),
-  - `BDP` - meritev: Bruto domači proizvod, prilagojen na cene (število: med 0 in 28000000000 v dolarjih),
-  - `populacija` - meritev: Populacija posamezne države (oz. ocena, kjer točna vrednost ni na voljo) (število),
-  - `izobrazba` - meritev: Indeks izobraženosti za posamezne države (število: med 0 in 1), 
-  - `religija` - meritev: Po en stolpec za vsako religijo (število: pomeni število vernih prebivalcev).
+  - `BDP` - meritev: bruto domači proizvod, prilagojen na cene (število: med 0 in 28000000000 v dolarjih),
+  - `populacija` - meritev: populacija posamezne države (oz. ocena, kjer točna vrednost ni na voljo) (število),
+  - `izobrazba` - meritev: indeks izobraženosti za posamezne države (število: med 0 in 1), 
+  - `hdi` - meritev: indeks človekove razvitosti za posamezne države (število: med 0 in 1)
+  
+2. `religije` - podatki o skoraj vseh svetovnih državah
+  - `country` - spremenljivka: ime države (besedilo),
+  - `christians` - meritev: število kristjanov v državi (število),
+  - `muslims` - meritev: število muslimanov v državi (število),
+  - `unaffiliated` - meritev: število nevernikov (ateistov) v državi (število),
+  - `hindus` - meritev: število hinduistov v državi (število),
+  - `buddhists` - meritev: število budistov v državi (število),
+  - `folkReligions` - meritev: število pripadikov neki lokalni veri v državi (število),
+  - `other` - meritev: število pripadnikov drugim religijam v državi (število)
+  - `jews` - meritev: število judov v državi (število),
 
-**Opomba**: V tabeli države nastopa več meritev, zato morda ni najbolj *tidy data* (morda dodaš kakšne indekse?).
-            Nekateri podatki niso vezani na leta (npr. verska struktura), njihove vrednosti so bile privzete za
-            konstantne skozi celotno obdobje.
+**Opomba**: Tabela `drzave` ni v *tidy data*, saj je BDP na prebivalca veliko bolj relevantana metrika, a je
+            izpeljana iz stolpcev `BDP` in `populacija`. 
+            HDI (human development index) je indeks, ki združuje izobazbo (pričakovano število let šolanja), BDP na
+            prebivalca in pričakovano življenjsko dobo. Povzame razvitost države.
+
 
 Spodnji graf prikazuje migracijo v sloveniji v zadnjih petdesetih letih (placeholder?).
 
