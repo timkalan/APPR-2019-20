@@ -50,7 +50,7 @@ obliki *tidy data*.
 
 2. `drzave` - podatki o skoraj vseh svetovnih državah
   - `drzava` - spremenljivka: ime države (besedilo),
-  - `leto` - spremenljivka: leto, na kateregea se podatek navezuje (število: med 1980 in 2019, ustrezno leto),
+  - `leto` - spremenljivka: leto, na kateregea se podatek navezuje (število: med 1990 in 2019, ustrezno leto),
   - `BDP` - meritev: bruto domači proizvod, prilagojen na cene (število: med 0 in 28000000000 v dolarjih),
   - `populacija` - meritev: populacija posamezne države (oz. ocena, kjer točna vrednost ni na voljo) (število),
   - `izobrazba` - meritev: indeks izobraženosti za posamezne države (število: med 0 in 1), 
