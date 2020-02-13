@@ -68,7 +68,6 @@ kolicina <- arrange(kolicina, BDP)
 # 
 # tm_shape(eu) + tm_polygons("izhod")
 
-svet$NAME <- standardize.countrynames(svet$NAME, suggest = "auto", print.changes = FALSE)
 zemPriselitev <- tm_shape(merge(svet, kolicina %>% group_by(country, BDP) %>% 
                  summarise(priselitev = sum(priselitev, na.rm = TRUE)), by.x = "NAME", by.y = "country")) + tm_polygons("priselitev")
 
