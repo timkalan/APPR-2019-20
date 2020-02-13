@@ -1,8 +1,5 @@
-# lahko združiš podatke o državah v eno samo tabelo 
-# poišči še podatke o izobrazbi!
 
-
-# UREJANJE GLAVNE TABELE O MIGRACIJI
+# MIGRACIJA ####
 migracija <- read_csv("podatki/migracija.csv", n_max = 160776, na = c("..")) %>%
   select(-"Migration by Gender Code", -"Country Origin Code", -"Country Dest Code")
 
@@ -19,7 +16,7 @@ poSpolih <- migracija %>% filter(gender=="Female" | gender=="Male" ) %>%
 poSpolih <- poSpolih[c(1,3,2,4,5)]
 
 
-# BDP podatki iz wikipedije
+# BDP (wikipedia) ####
 url <- "https://en.wikipedia.org/wiki/List_of_countries_by_past_and_projected_GDP_(PPP)"
 stran <- read_html(url)
 
@@ -52,7 +49,7 @@ bdp$BDP <- bdp$BDP * 1000
 bdp[, 2] <- sapply(bdp[, 2], as.numeric)
 
 
-# POPULACIJA
+# POPULACIJA ####
 pop <- read.csv2("podatki/populacija.csv", skip = 16) %>% 
   filter(Type=="Country/Area") %>%
   select(-"Index", -"Variant", -"Notes", -"Country.code", -"Parent.code", -"Type") 
@@ -67,7 +64,7 @@ pop <- pop %>% gather(leto, populacija, "1960":"2010")
 pop$populacija <- pop$populacija * 1000
 
 
-# RELIGIJE
+# RELIGIJE ####
 relig <- read.csv("podatki/religije.csv") %>%
   rename(country = name) %>%
   select(-"pop2019") 
@@ -76,7 +73,7 @@ relig[, 1] <- sapply(relig[, 1], as.character)
 rm(devetdeseta, dvadeseta, dvatisoca, migracija, osemdeseta, stran, bdpji, url)
 
 
-#ZEMLJEVID
+# ZEMLJEVID ####
 svet <- uvozi.zemljevid("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
                         "ne_50m_admin_0_countries", encoding="UTF-8")
 # svet <- uvozi.zemljevid("http://thematicmapping.org/downloads/TM_WORLD_BORDERS-0.3.zip", "TM_WORLD_BORDERS-0.3")
