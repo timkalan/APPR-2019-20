@@ -65,10 +65,40 @@ pop$populacija <- pop$populacija * 1000
 
 
 # RELIGIJE ####
-relig <- read.csv("podatki/religije.csv") %>%
+religije <- read.csv("podatki/religije.csv") %>%
   rename(country = name) %>%
   select(-"pop2019") 
-relig[, 1] <- sapply(relig[, 1], as.character)
+religije[, 1] <- sapply(religije[, 1], as.character)
+
+
+# IZOBRAZBA in HDI####
+izobrazba <- read_csv("podatki/education_index.csv", skip = 1, n_max = 189, na = c(".."))
+izobrazba <- Filter(function(x)!all(is.na(x)), izobrazba)
+izobrazba$`HDI Rank (2018)` <- NULL
+izobrazba <- gather(izobrazba, leto, indeks, "1990":"2018")
+
+hdi <- read_csv("podatki/hdi.csv", skip = 1, n_max = 189, na = c(".."))
+hdi <- Filter(function(x)!all(is.na(x)), hdi)
+hdi$`HDI Rank (2018)` <- NULL
+hdi <- gather(hdi, leto, HDI, "1990":"2018")
+
+
+# DRZAVE ####
+drzave <- NULL
+
+
+# popravljanje imen ####
+# to bi lahko bilo lepše napisano, a je v trenutni verziji paketa napaka
+bdp$country <- standardize.countrynames(bdp$country, suggest = "auto", print.changes = FALSE)
+pop$country <- standardize.countrynames(pop$country, suggest = "auto", print.changes = FALSE)
+poSpolih$origin_country <- standardize.countrynames(poSpolih$origin_country, suggest = "auto", print.changes = FALSE)
+poSpolih$dest_country <- standardize.countrynames(poSpolih$dest_country, suggest = "auto", print.changes = FALSE)
+skupno$origin_country <- standardize.countrynames(skupno$origin_country, suggest = "auto", print.changes = FALSE)
+skupno$dest_country <- standardize.countrynames(skupno$dest_country, suggest = "auto", print.changes = FALSE)
+religije$country <- standardize.countrynames(religije$country, suggest = "auto", print.changes = FALSE)
+izobrazba$Country <- standardize.countrynames(izobrazba$Country, suggest = "auto", print.changes = FALSE)
+hdi$Country <- standardize.countrynames(hdi$Country, suggest = "auto", print.changes = FALSE)
+
 
 rm(devetdeseta, dvadeseta, dvatisoca, migracija, osemdeseta, stran, bdpji, url)
 
@@ -76,16 +106,6 @@ rm(devetdeseta, dvadeseta, dvatisoca, migracija, osemdeseta, stran, bdpji, url)
 # ZEMLJEVID ####
 svet <- uvozi.zemljevid("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
                         "ne_50m_admin_0_countries", encoding="UTF-8")
-# svet <- uvozi.zemljevid("http://thematicmapping.org/downloads/TM_WORLD_BORDERS-0.3.zip", "TM_WORLD_BORDERS-0.3")
-
-
-# popravljanje imen držav (to lahko bolje napišeš)
-bdp$country <- standardize.countrynames(bdp$country, suggest = "auto", print.changes = FALSE)
-pop$country <- standardize.countrynames(pop$country, suggest = "auto", print.changes = FALSE)
-poSpolih$origin_country <- standardize.countrynames(poSpolih$origin_country, suggest = "auto", print.changes = FALSE)
-poSpolih$dest_country <- standardize.countrynames(poSpolih$dest_country, suggest = "auto", print.changes = FALSE)
-relig$country <- standardize.countrynames(relig$country, suggest = "auto", print.changes = FALSE)
-
 
 
 
