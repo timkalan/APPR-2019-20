@@ -2,10 +2,10 @@
 migracija <- read_csv("podatki/migracija.csv", n_max = 160776, na = c("..")) %>%
   select(-"Migration by Gender Code", -"Country Origin Code", -"Country Dest Code")
 
-colnames(migracija) <- c("origin_country", "gender", "dest_country", 
+colnames(migracija) <- c("origin_country", "gender", "dest_country",
                          "1960-1969", "1970-1979", "1980-1989", "1990-1999", "2000-2010")
 
-skupno <- migracija %>% filter(gender=="Total") %>% select(-"gender") %>% 
+skupno <- migracija %>% filter(gender=="Total") %>% select(-"gender") %>%
   gather(decade, number, "1960-1969", "1970-1979", "1980-1989", "1990-1999", "2000-2010") %>%
   arrange(origin_country)
 
@@ -19,12 +19,27 @@ stock <- stock[!is.na(stock$`Type of data (a)`),] %>%
   select(-"Type of data (a)", -"Notes", -"Code", country="Major area, region, country or area of destination")
 stock[2] <- NULL
 
-stockT <- stock[, 1:19]
-colnames(stockT) <- c("year", "country", 
+stockM <- stock[, c(1:2, 20:36)]
+colnames(stockM) <- c("year", "country", 
                       "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", 
                       "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75+", "total")
-stockT <- stockT %>% arrange(year) %>% 
-  gather(age, number, "0-4":"total")
+stockM <- stockM %>%  
+  gather(age, number, "0-4":"total") %>%
+  arrange(year, country) %>%
+  mutate(gender="male")
+
+stockF <- stock[, c(1:2, 37:53)]
+colnames(stockF) <- c("year", "country", 
+                      "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", 
+                      "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75+", "total")
+stockF <- stockF %>%  
+  gather(age, number, "0-4":"total") %>%
+  arrange(year, country) %>% 
+  mutate(gender="female")
+
+stock <- rbind(stockM, stockF) %>% arrange(year, country)
+stock <- stock[c(2, 1, 3, 5, 4)]
+stock$number <- as.numeric(stock$number)
 
 
 # BDP (wikipedia) ####
@@ -69,12 +84,10 @@ colnames(pop) <- c("country", 1950:2020)
 pop[, 2:72] <- as.data.frame(apply(pop[, 2:72],2,function(x)gsub('\\s+', '',x)))
 pop[, 1:72] <- sapply(pop[, 1:72], as.character)
 pop[, 2:72] <- sapply(pop[, 2:72], as.numeric)
-pop <- arrange(pop, country)
-pop <- pop[, c(1, 12:72)]
-pop <- pop %>% gather(leto, populacija, "1960":"2020")
+pop <- pop[, c(1, 12:72)] %>% arrange(country) %>%
+  gather(leto, populacija, "1960":"2020")
 pop$populacija <- pop$populacija * 1000
 pop$leto <- as.numeric(pop$leto)
-
 
 # RELIGIJE ####
 religije <- read.csv("podatki/religije.csv") %>%
@@ -85,15 +98,13 @@ religije[, 1] <- sapply(religije[, 1], as.character)
 
 # IZOBRAZBA in HDI####
 izobrazba <- read_csv("podatki/education_index.csv", skip = 1, n_max = 189, na = c(".."))
-izobrazba <- Filter(function(x)!all(is.na(x)), izobrazba)
-izobrazba$`HDI Rank (2018)` <- NULL
-izobrazba <- gather(izobrazba, leto, izobrazenost, "1990":"2018")
+izobrazba <- Filter(function(x)!all(is.na(x)), izobrazba) %>% 
+  select(-"HDI Rank (2018)") %>% gather(leto, izobrazenost, "1990":"2018")
 izobrazba$leto <- as.numeric(izobrazba$leto)
 
 hdi <- read_csv("podatki/hdi.csv", skip = 1, n_max = 189, na = c(".."))
-hdi <- Filter(function(x)!all(is.na(x)), hdi)
-hdi$`HDI Rank (2018)` <- NULL
-hdi <- gather(hdi, leto, HDI, "1990":"2018")
+hdi <- Filter(function(x)!all(is.na(x)), hdi) %>% 
+  select(-"HDI Rank (2018)") %>% gather(leto, HDI, "1990":"2018")
 hdi$leto <- as.numeric(hdi$leto)
 
 
@@ -101,14 +112,14 @@ hdi$leto <- as.numeric(hdi$leto)
 # to bi lahko bilo lepše napisano, a je v trenutni verziji paketa napaka
 bdp$country <- standardize.countrynames(bdp$country, suggest = "auto", print.changes = FALSE)
 pop$country <- standardize.countrynames(pop$country, suggest = "auto", print.changes = FALSE)
-poSpolih$origin_country <- standardize.countrynames(poSpolih$origin_country, suggest = "auto", print.changes = FALSE)
-poSpolih$dest_country <- standardize.countrynames(poSpolih$dest_country, suggest = "auto", print.changes = FALSE)
-skupno$origin_country <- standardize.countrynames(skupno$origin_country, suggest = "auto", print.changes = FALSE)
-skupno$dest_country <- standardize.countrynames(skupno$dest_country, suggest = "auto", print.changes = FALSE)
+# poSpolih$origin_country <- standardize.countrynames(poSpolih$origin_country, suggest = "auto", print.changes = FALSE)
+# poSpolih$dest_country <- standardize.countrynames(poSpolih$dest_country, suggest = "auto", print.changes = FALSE)
+# skupno$origin_country <- standardize.countrynames(skupno$origin_country, suggest = "auto", print.changes = FALSE)
+# skupno$dest_country <- standardize.countrynames(skupno$dest_country, suggest = "auto", print.changes = FALSE)
 religije$country <- standardize.countrynames(religije$country, suggest = "auto", print.changes = FALSE)
 izobrazba$Country <- standardize.countrynames(izobrazba$Country, suggest = "auto", print.changes = FALSE)
 hdi$Country <- standardize.countrynames(hdi$Country, suggest = "auto", print.changes = FALSE)
-stockT$country <- standardize.countrynames(stockT$country, suggest = "auto", print.changes = FALSE)
+stock$country <- standardize.countrynames(stock$country, suggest = "auto", print.changes = FALSE)
 
 
 # DRZAVE ####
@@ -119,7 +130,8 @@ drzave <- filter(bdp, leto > 1989 & leto < 2019) %>%
   mutate(BDPpc=BDP/populacija)
 
 
-rm(devetdeseta, dvadeseta, dvatisoca, migracija, osemdeseta, stran, bdpji, url, bdp, izobrazba, hdi, pop)
+rm(devetdeseta, dvadeseta, dvatisoca, migracija, osemdeseta, 
+   stran, bdpji, url, bdp, izobrazba, hdi, pop, stockF, stockM)
 
 
 # ZEMLJEVID ####
