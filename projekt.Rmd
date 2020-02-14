@@ -47,16 +47,23 @@ obliki *tidy data*.
   - `gender` - spremenljivka: spol izseljenca (oz. priseljenca) (besedilo),
   - `decade` - spremenljivka: desetletje, v katerem se je preseljevanje dogajalo (besedilo),
   - `number` - meritev: število ljudi, ki se je preselilo iz origin v dest v desetletju decade (število: med 0 in 5200000).
+  
+2. `stock` - podatki o številu migrantov v posamezni državi
+  - `country` - spremenljivka: ime države (besedilo),
+  - `year` - spremenljivka: leto, na kateregea se podatek navezuje (število: med 1990 in 2019, ustrezno leto),
+  - `age` - spremenljivka: starostna skupina (besedilo: petletne skupine),
+  - `gender` - spremenljivka: spol imigranta (besedilo: male ali female),
+  - `number` - meritev: število imigrantov (število).
 
-2. `drzave` - podatki o skoraj vseh svetovnih državah
+3. `drzave` - podatki o skoraj vseh svetovnih državah
   - `drzava` - spremenljivka: ime države (besedilo),
   - `leto` - spremenljivka: leto, na kateregea se podatek navezuje (število: med 1990 in 2019, ustrezno leto),
   - `BDP` - meritev: bruto domači proizvod, prilagojen na cene (število: med 0 in 28000000000 v dolarjih),
   - `populacija` - meritev: populacija posamezne države (oz. ocena, kjer točna vrednost ni na voljo) (število),
   - `izobrazba` - meritev: indeks izobraženosti za posamezne države (število: med 0 in 1), 
-  - `hdi` - meritev: indeks človekove razvitosti za posamezne države (število: med 0 in 1)
+  - `hdi` - meritev: indeks človekove razvitosti za posamezne države (število: med 0 in 1).
   
-2. `religije` - podatki o skoraj vseh svetovnih državah
+4. `religije` - podatki o verski strukturi posameznih držav
   - `country` - spremenljivka: ime države (besedilo),
   - `christians` - meritev: število kristjanov v državi (število),
   - `muslims` - meritev: število muslimanov v državi (število),
@@ -64,8 +71,8 @@ obliki *tidy data*.
   - `hindus` - meritev: število hinduistov v državi (število),
   - `buddhists` - meritev: število budistov v državi (število),
   - `folkReligions` - meritev: število pripadikov neki lokalni veri v državi (število),
-  - `other` - meritev: število pripadnikov drugim religijam v državi (število)
-  - `jews` - meritev: število judov v državi (število),
+  - `other` - meritev: število pripadnikov drugim religijam v državi (število),
+  - `jews` - meritev: število judov v državi (število).
 
 **Opomba**: Tabela `drzave` ni v *tidy data*, saj je BDP na prebivalca veliko bolj relevantana metrika, a je
             izpeljana iz stolpcev `BDP` in `populacija`. 
@@ -101,14 +108,14 @@ Graf prikazuje povezavo med BDP-jem države in število priseljencev (skupno), k
 močne korelacije, bo po vsej verjetnosti zamenjan.
 
 ```{r graf, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
-ggplot(kolicina %>% filter(country != "United States"), aes(x = BDP, y = priselitev, color = gender)) + 
-  geom_point() + ggtitle("Povezava med priseljevanjem v državo in BDP") 
+# ggplot(kolicina %>% filter(country != "United States"), aes(x = BDP, y = priselitev, color = gender)) + 
+#   geom_point() + ggtitle("Povezava med priseljevanjem v državo in BDP") 
 ```
 
-Spodnji zemljevid prikazuje države, razvrščene po številu priseljencev skozi celotno obdobje.
+Spodnji zemljevid prikazuje države, razvrščene po deležu priseljencev glede na celotno populacijo leta 2018.
 
-```{r zemljevid, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center', fig.cap='Zemljevid izseljevanja iz držav'}
-zemPriselitev
+```{r zemljevid, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center', fig.cap='Zemljevid deleža priseljencev'}
+zemljevidStock
 ```
 
 ***
