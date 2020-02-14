@@ -1,18 +1,18 @@
 # MIGRACIJA ####
-migracija <- read_csv("podatki/migracija.csv", n_max = 160776, na = c("..")) %>%
-  select(-"Migration by Gender Code", -"Country Origin Code", -"Country Dest Code")
-
-colnames(migracija) <- c("origin_country", "gender", "dest_country",
-                         "1960-1969", "1970-1979", "1980-1989", "1990-1999", "2000-2010")
-
-skupno <- migracija %>% filter(gender=="Total") %>% select(-"gender") %>%
-  gather(decade, number, "1960-1969", "1970-1979", "1980-1989", "1990-1999", "2000-2010") %>%
-  arrange(origin_country)
-
-poSpolih <- migracija %>% filter(gender=="Female" | gender=="Male" ) %>%
-  gather(decade, number, "1960-1969", "1970-1979", "1980-1989", "1990-1999", "2000-2010") %>%
-  arrange(origin_country)
-poSpolih <- poSpolih[c(1,3,2,4,5)]
+# migracija <- read_csv("podatki/migracija.csv", n_max = 160776, na = c("..")) %>%
+#   select(-"Migration by Gender Code", -"Country Origin Code", -"Country Dest Code")
+# 
+# colnames(migracija) <- c("origin_country", "gender", "dest_country",
+#                          "1960-1969", "1970-1979", "1980-1989", "1990-1999", "2000-2010")
+# 
+# skupno <- migracija %>% filter(gender=="Total") %>% select(-"gender") %>%
+#   gather(decade, number, "1960-1969", "1970-1979", "1980-1989", "1990-1999", "2000-2010") %>%
+#   arrange(origin_country)
+# 
+# poSpolih <- migracija %>% filter(gender=="Female" | gender=="Male" ) %>%
+#   gather(decade, number, "1960-1969", "1970-1979", "1980-1989", "1990-1999", "2000-2010") %>%
+#   arrange(origin_country)
+# poSpolih <- poSpolih[c(1,3,2,4,5)]
 
 stock <- read_xlsx("podatki/UNstock.xlsx", sheet = 2, range = "A15:BE1997", na = "..")
 stock <- stock[!is.na(stock$`Type of data (a)`),] %>% 
@@ -40,6 +40,18 @@ stockF <- stockF %>%
 stock <- rbind(stockM, stockF) %>% arrange(year, country)
 stock <- stock[c(2, 1, 3, 5, 4)]
 stock$number <- as.numeric(stock$number)
+
+migranti <- read_xlsx("podatki/UNdestination.xlsx", sheet = 2, skip = 14, na = "..")
+imena <- migranti[1,] %>% 
+  select(-"Type of data (a)", -"Notes", -"Code", destination="Major area, region, country or area of destination")
+migranti <- migranti[!is.na(migranti$`Type of data (a)`),] %>%
+  select(-"Type of data (a)", -"Notes", -"Code", destination="Major area, region, country or area of destination")
+migranti[2] <- NULL
+imena[2] <- NULL
+colnames(migranti)[3:length(colnames(migranti))] <- imena[3:length(colnames(migranti))]
+migranti <- migranti %>% gather(origin, number, "Total":"Zimbabwe") %>% 
+  arrange(Year, origin, destination)
+migranti <- migranti[c(3, 2, 1, 4)]
 
 
 # BDP (wikipedia) ####
@@ -120,6 +132,8 @@ religije$country <- standardize.countrynames(religije$country, suggest = "auto",
 izobrazba$Country <- standardize.countrynames(izobrazba$Country, suggest = "auto", print.changes = FALSE)
 hdi$Country <- standardize.countrynames(hdi$Country, suggest = "auto", print.changes = FALSE)
 stock$country <- standardize.countrynames(stock$country, suggest = "auto", print.changes = FALSE)
+migranti$origin <- standardize.countrynames(migranti$origin, suggest = "auto", print.changes = FALSE)
+migranti$destination <- standardize.countrynames(migranti$destination, suggest = "auto", print.changes = FALSE)
 
 
 # DRZAVE ####
@@ -131,12 +145,13 @@ drzave <- filter(bdp, leto > 1989 & leto < 2019) %>%
 
 
 rm(devetdeseta, dvadeseta, dvatisoca, migracija, osemdeseta, 
-   stran, bdpji, url, bdp, izobrazba, hdi, pop, stockF, stockM)
+   stran, bdpji, url, bdp, izobrazba, hdi, pop, stockF, stockM, imena)
 
 
 # ZEMLJEVID ####
-svet <- uvozi.zemljevid("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
-                        "ne_50m_admin_0_countries", encoding="UTF-8")
+svet <- uvozi.zemljevid(
+  "http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
+  "ne_50m_admin_0_countries", encoding="UTF-8")
 svet$NAME <- standardize.countrynames(svet$NAME, suggest = "auto", print.changes = FALSE) 
 
 
