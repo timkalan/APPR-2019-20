@@ -1,10 +1,3 @@
-#stock <- read_xlsx("podatki/UNstock.xlsx", sheet = 2, skip = 15)
-#stockT <- filter(stock[,1:23], stock$...6 != NA)
-
-
-
-
-
 # MIGRACIJA ####
 migracija <- read_csv("podatki/migracija.csv", n_max = 160776, na = c("..")) %>%
   select(-"Migration by Gender Code", -"Country Origin Code", -"Country Dest Code")
@@ -20,6 +13,18 @@ poSpolih <- migracija %>% filter(gender=="Female" | gender=="Male" ) %>%
   gather(decade, number, "1960-1969", "1970-1979", "1980-1989", "1990-1999", "2000-2010") %>%
   arrange(origin_country)
 poSpolih <- poSpolih[c(1,3,2,4,5)]
+
+stock <- read_xlsx("podatki/UNstock.xlsx", sheet = 2, range = "A15:BE1997", na = "..")
+stock <- stock[!is.na(stock$`Type of data (a)`),] %>% 
+  select(-"Type of data (a)", -"Notes", -"Code", country="Major area, region, country or area of destination")
+stock[2] <- NULL
+
+stockT <- stock[, 1:19]
+colnames(stockT) <- c("year", "country", 
+                      "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", 
+                      "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75+", "total")
+stockT <- stockT %>% arrange(year) %>% 
+  gather(age, number, "0-4":"total")
 
 
 # BDP (wikipedia) ####
@@ -103,7 +108,7 @@ skupno$dest_country <- standardize.countrynames(skupno$dest_country, suggest = "
 religije$country <- standardize.countrynames(religije$country, suggest = "auto", print.changes = FALSE)
 izobrazba$Country <- standardize.countrynames(izobrazba$Country, suggest = "auto", print.changes = FALSE)
 hdi$Country <- standardize.countrynames(hdi$Country, suggest = "auto", print.changes = FALSE)
-svet$NAME <- standardize.countrynames(svet$NAME, suggest = "auto", print.changes = FALSE)                                      
+stockT$country <- standardize.countrynames(stockT$country, suggest = "auto", print.changes = FALSE)
 
 
 # DRZAVE ####
@@ -120,7 +125,7 @@ rm(devetdeseta, dvadeseta, dvatisoca, migracija, osemdeseta, stran, bdpji, url, 
 # ZEMLJEVID ####
 svet <- uvozi.zemljevid("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
                         "ne_50m_admin_0_countries", encoding="UTF-8")
-
+svet$NAME <- standardize.countrynames(svet$NAME, suggest = "auto", print.changes = FALSE) 
 
 
 # # 2. faza: Uvoz podatkov
