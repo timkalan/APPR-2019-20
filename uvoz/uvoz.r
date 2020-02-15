@@ -20,26 +20,26 @@ stock <- stock[!is.na(stock$`Type of data (a)`),] %>%
 stock[2] <- NULL
 
 stockM <- stock[, c(1:2, 20:36)]
-colnames(stockM) <- c("year", "country", 
-                      "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", 
-                      "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75+", "total")
+colnames(stockM) <- c("year", "country", 1:17)
 stockM <- stockM %>%  
-  gather(age, number, "0-4":"total") %>%
+  gather(age, number, "1":"17") %>%
   arrange(year, country) %>%
   mutate(gender="male")
 
 stockF <- stock[, c(1:2, 37:53)]
-colnames(stockF) <- c("year", "country", 
-                      "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", 
-                      "35-39", "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75+", "total")
+colnames(stockF) <- c("year", "country", 1:17)
 stockF <- stockF %>%  
-  gather(age, number, "0-4":"total") %>%
+  gather(age, number, "1":"17") %>%
   arrange(year, country) %>% 
   mutate(gender="female")
 
 stock <- rbind(stockM, stockF) %>% arrange(year, country)
 stock <- stock[c(2, 1, 3, 5, 4)]
 stock$number <- as.numeric(stock$number)
+stock$age <- factor(stock$age, levels = 1:17,
+                    labels = c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", 
+                             "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75+", "total"))
+
 
 migranti <- read_xlsx("podatki/UNdestination.xlsx", sheet = 2, skip = 14, na = "..")
 imena <- migranti[1,] %>% 
