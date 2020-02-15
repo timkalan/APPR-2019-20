@@ -102,14 +102,14 @@ Spodnji graf prikazuje migracijo v sloveniji v zadnjih petdesetih letih (placeho
 
 ```{r vizualizacija, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 source("vizualizacija/vizualizacija.r", encoding="UTF-8")
+source("analiza/analiza.r", encoding="UTF-8")
 ```
 
 Graf prikazuje povezavo med BDP-jem države in število priseljencev (skupno), ker pa ni moč opaziti
 močne korelacije, bo po vsej verjetnosti zamenjan.
 
 ```{r graf, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
-# ggplot(kolicina %>% filter(country != "United States"), aes(x = BDP, y = priselitev, color = gender)) + 
-#   geom_point() + ggtitle("Povezava med priseljevanjem v državo in BDP") 
+starostLeta
 ```
 
 Spodnji zemljevid prikazuje države, razvrščene po deležu priseljencev glede na celotno populacijo leta 2018.
