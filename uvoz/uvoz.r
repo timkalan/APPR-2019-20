@@ -51,7 +51,7 @@ imena[2] <- NULL
 colnames(migranti)[3:length(colnames(migranti))] <- imena[3:length(colnames(migranti))]
 migranti <- migranti %>% gather(origin, number, "Total":"Zimbabwe") %>% 
   arrange(Year, origin, destination)
-migranti <- migranti[c(3, 2, 1, 4)]
+migranti <- migranti[c(3, 2, 1, 4)] %>% mutate(number = as.numeric(number))
 
 
 # BDP (wikipedia) ####
