@@ -1,4 +1,4 @@
-# ZEMLJEVIDI ####
+# ZEMLJEVID - delež ####
 delezi <- stock %>%  
   filter(age == "total", year == "2019") %>%
   select(-"year", -"age") %>% 
@@ -14,12 +14,12 @@ zemStock <- tm_shape(merge(svet, delezi,
   tm_polygons("delez", midpoint = 0.4)
 
 
-# GRAFI ####
+# GRAF - starostne skupine ####
 starostneSkupine <- stock %>% 
   filter(age != "total") %>%
   group_by(year, age, gender) %>%
   summarise(number = sum(number, na.rm = TRUE))
-starostGraf <- ggplot(starostneSkupine, aes(x = year, y = number)) + 
+starostGraf <- ggplot(starostneSkupine, aes(x = year, y = number)) + #eh
   geom_line() + facet_grid(age~gender)
 
 dve <- ggplot(starostneSkupine, aes(x = age, y = number)) + 
@@ -30,6 +30,33 @@ starostLeta <- ggplot(starostneSkupine %>%
                         summarise(number = sum(number, na.rm = TRUE)), 
                       aes(x = age, y = number)) + 
   geom_boxplot()
+
+
+# GRAF - države (to bi rad naredil v shiny) ####
+emigracija <- migranti %>% group_by(origin, Year) %>%
+  summarise(number = sum(number, na.rm = TRUE))
+imigracija <- migranti %>% group_by(destination, Year) %>%
+  summarise(number = sum(number, na.rm = TRUE))
+
+drzave$leto[drzave$leto == 2018] <- 2019 #manjša guljufija
+master <- drzave %>% 
+  inner_join(emigracija, by = c("country" = "origin", "leto" = "Year")) %>%
+  rename(emigracija = number) %>%
+  inner_join(imigracija, by = c("country" = "destination", "leto" = "Year")) %>%
+  rename(imigracija = number)
+
+grafBdp <- ggplot(master, aes(x = BDP, y = imigracija)) + geom_point() + 
+  scale_x_log10() + scale_y_log10()
+#  facet_grid(rows = "leto") + geom_smooth(method = "lm")
+
+grafBdppc <- ggplot(master, aes(x = BDPpc, y = emigracija)) + geom_point() + 
+  scale_y_log10() + scale_x_log10()
+
+# trash
+grafIzobrazba <- ggplot(master, aes(x = izobrazenost, y = imigracija)) + geom_point() +
+  scale_y_log10()
+grafHDI <- ggplot(master, aes(x = HDI, y = imigracija)) + geom_point() +
+  scale_y_log10()
 
 
 # # Izračun neto migracije za posamezne države skozi čas
