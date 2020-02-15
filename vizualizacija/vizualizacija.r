@@ -13,14 +13,23 @@ zemStock <- tm_shape(merge(svet, delezi,
                                  by.x = "NAME", by.y = "country")) + 
   tm_polygons("delez", midpoint = 0.4)
 
-skupineDelez <- kmeans(delezi$delez, 3, nstart = 1500)
-zemCluster <- tm_shape(merge(svet, data.frame(country = delezi$country, skupina = factor(skupineDelez$cluster)), 
-                    by.x = "NAME", by.y = "country")) + 
-  tm_polygons("skupina")
-
 
 # GRAFI ####
+starostneSkupine <- stock %>% 
+  filter(age != "total") %>%
+  group_by(year, age, gender) %>%
+  summarise(number = sum(number, na.rm = TRUE))
+starostGraf <- ggplot(starostneSkupine, aes(x = year, y = number)) + 
+  geom_line() + facet_grid(age~gender)
 
+dve <- ggplot(starostneSkupine, aes(x = age, y = number)) + 
+  geom_point() + facet_grid(year~gender)
+
+starostLeta <- ggplot(starostneSkupine %>% 
+                        group_by(year, age) %>%
+                        summarise(number = sum(number, na.rm = TRUE)), 
+                      aes(x = age, y = number)) + 
+  geom_boxplot()
 
 
 # # Izračun neto migracije za posamezne države skozi čas
