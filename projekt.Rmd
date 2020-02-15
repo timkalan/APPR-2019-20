@@ -110,6 +110,7 @@ močne korelacije, bo po vsej verjetnosti zamenjan.
 
 ```{r graf, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 starostLeta
+grafBdp
 ```
 
 Spodnji zemljevid prikazuje države, razvrščene po deležu priseljencev glede na celotno populacijo leta 2018.
