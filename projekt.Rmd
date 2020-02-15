@@ -83,16 +83,16 @@ obliki *tidy data*.
 Spodnji graf prikazuje migracijo v sloveniji v zadnjih petdesetih letih (placeholder?).
 
 ```{r histogram, echo=FALSE, message=FALSE, fig.align='center', fig.cap='Slovenska migracija'}
-sloIZ <- poSpolih %>% filter(origin_country == "Slovenia") %>% select(-"origin_country") %>%
-  group_by(gender, decade) %>% summarise(izselitev = sum(number, na.rm = TRUE))
-sloV <- poSpolih %>% filter(dest_country == "Slovenia") %>% select(-"dest_country") %>%
-  group_by(gender, decade) %>% summarise(vselitev = sum(number, na.rm = TRUE))
-svn <- inner_join(sloIZ, sloV, by = c("gender", "decade"))
-svn$izselitev <- svn$izselitev * (-1)
-ggplot(svn, aes(x = decade, y = vselitev, fill = gender)) + 
-  geom_bar(stat = "identity", position=position_dodge(), color = "black") + 
-  geom_bar(aes(x = decade, y = izselitev), stat = "identity", position=position_dodge(), color = "black") +
-  xlab("Desetletje") + ylab("izselitev/vselitev")
+# sloIZ <- poSpolih %>% filter(origin_country == "Slovenia") %>% select(-"origin_country") %>%
+#   group_by(gender, decade) %>% summarise(izselitev = sum(number, na.rm = TRUE))
+# sloV <- poSpolih %>% filter(dest_country == "Slovenia") %>% select(-"dest_country") %>%
+#   group_by(gender, decade) %>% summarise(vselitev = sum(number, na.rm = TRUE))
+# svn <- inner_join(sloIZ, sloV, by = c("gender", "decade"))
+# svn$izselitev <- svn$izselitev * (-1)
+# ggplot(svn, aes(x = decade, y = vselitev, fill = gender)) + 
+#   geom_bar(stat = "identity", position=position_dodge(), color = "black") + 
+#   geom_bar(aes(x = decade, y = izselitev), stat = "identity", position=position_dodge(), color = "black") +
+#   xlab("Desetletje") + ylab("izselitev/vselitev")
   
 ```
 
@@ -115,7 +115,8 @@ močne korelacije, bo po vsej verjetnosti zamenjan.
 Spodnji zemljevid prikazuje države, razvrščene po deležu priseljencev glede na celotno populacijo leta 2018.
 
 ```{r zemljevid, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center', fig.cap='Zemljevid deleža priseljencev'}
-zemljevidStock
+zemStock
+zemCluster
 ```
 
 ***
