@@ -102,10 +102,10 @@ pop$populacija <- pop$populacija * 1000
 pop$leto <- as.numeric(pop$leto)
 
 # RELIGIJE ####
-religije <- read.csv("podatki/religije.csv") %>%
+religije <- read_csv("podatki/religije.csv", na = c("5000")) %>%
+# 5000 v podatkih pomeni zanemarljivo malo
   rename(country = name) %>%
   select(-"pop2019") 
-religije[, 1] <- sapply(religije[, 1], as.character)
 
 
 # IZOBRAZBA in HDI####
