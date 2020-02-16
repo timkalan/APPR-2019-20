@@ -20,10 +20,10 @@ Za vire bom uporabil spletne strani [World Bank](https://www.worldbank.org), [Mi
 Viri imajo podatke v obliki CSV in v obliki HTML, zemljevid sveta, ki je trenutno uporabljen pa je vgrajen v R.
 
 #### Tabele
-* Države glede na BDP (leto, država, BDP)
-* Neto imigracija (leto, država, količina)
-* Skupna migracija (izvorna država, destinacija, spol, desetletje, količina)
-* Države glede na religijo (država, najpopularnejša religija)
+* migranti (origin, destination, leto, število),
+* stock(država, leto, starost, spol, število), 
+* države (država, leto, BDP, populacija, izobraženost, HDI), 
+* religije (država, stolpci, ki prikazujejo število vernikov).
 
 Cilj je najti korelacije med migracijo in raznimi indikatorji, ter ugotoviti, katere države so za emigracijo "najboljše".
 

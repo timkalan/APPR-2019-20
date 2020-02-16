@@ -41,13 +41,19 @@ Uvozili smo podatke o migraciji, populaciji, religiji in izobrazbi v obliki CSV 
 poleg tega pa še podatke o BDP-ju držav skozi čas v obliki HTML iz Wikipedije. Podatke imamo v dveh razpredelnicah v 
 obliki *tidy data*. 
 
-1. `poSpolih` - podatki o migraciji ljudi
-  - `origin_country` - spremenljivka: ime države, iz katere so se ljudje izseljevali (besedilo),
-  - `dest_country` - spremenljivka: ime države, v katero so se ljudje vseljevali (besedilo),
-  - `gender` - spremenljivka: spol izseljenca (oz. priseljenca) (besedilo),
-  - `decade` - spremenljivka: desetletje, v katerem se je preseljevanje dogajalo (besedilo),
-  - `number` - meritev: število ljudi, ki se je preselilo iz origin v dest v desetletju decade (število: med 0 in 5200000).
+<!-- 1. `poSpolih` - podatki o migraciji ljudi -->
+<!--   - `origin_country` - spremenljivka: ime države, iz katere so se ljudje izseljevali (besedilo), -->
+<!--   - `dest_country` - spremenljivka: ime države, v katero so se ljudje vseljevali (besedilo), -->
+<!--   - `gender` - spremenljivka: spol izseljenca (oz. priseljenca) (besedilo), -->
+<!--   - `decade` - spremenljivka: desetletje, v katerem se je preseljevanje dogajalo (besedilo), -->
+<!--   - `number` - meritev: število ljudi, ki se je preselilo iz origin v dest v desetletju decade (število: med 0 in 5200000). -->
   
+1. `migranti` - podatki o migraciji ljudi
+  - `origin` - spremenljivka: ime države, iz katere so se ljudje izseljevali (besedilo),
+  - `destination` - spremenljivka: ime države, v katero so se ljudje vseljevali (besedilo),
+  - `year` - spremenljivka: leto, v katerem je bila izmerjena migracija (število: med 1990 in 2019, petletni intervali),
+  - `number` - meritev: število ljudi, ki se je preselilo iz origin v destination v določenem letu (število).
+
 2. `stock` - podatki o številu migrantov v posamezni državi
   - `country` - spremenljivka: ime države (besedilo),
   - `year` - spremenljivka: leto, na kateregea se podatek navezuje (število: med 1990 in 2019, ustrezno leto),
