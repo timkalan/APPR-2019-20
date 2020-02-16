@@ -59,6 +59,23 @@ grafHDI <- ggplot(master, aes(x = HDI, y = imigracija)) + geom_point() +
   scale_y_log10()
 
 
+# RELIGIJE (2019) ####
+religigranti <- religije %>% inner_join(emigracija %>% 
+                                          filter(Year == "2019"), 
+                                        by = c("country" = "origin")) %>%
+  select(-"Year", emigracija = number) %>% inner_join(imigracija %>% filter(Year == "2019"), 
+                                 by = c("country" = "destination")) %>%
+  select(-"Year", imigracija = number) %>%
+  inner_join(drzave %>% filter(leto == "2019") %>%
+               select(-"leto", -"BDP", -"izobrazenost", -"HDI", -"BDPpc"), 
+             by = c("country"))
+
+muslimani <- ggplot(religigranti, 
+                    aes(x = muslims, y = imigracija)) + 
+  geom_point() + scale_x_log10() + scale_y_log10()
+  
+  
+  
 # # Izračun neto migracije za posamezne države skozi čas
 # izhod <- skupno %>% group_by(origin_country, decade) %>%
 #   summarise(izhod=sum(number, na.rm=TRUE)) %>%
