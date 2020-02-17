@@ -71,9 +71,10 @@ religigranti <- religije %>% inner_join(emigracija %>%
              by = c("country"))
 
 muslimani <- ggplot(religigranti, 
-                    aes(x = muslims, y = imigracija)) + 
+                    aes(x = muslims, y = emigracija)) + 
   geom_point() + scale_x_log10() + scale_y_log10()
-  
+#   geom_smooth(method = "gam")
+# cor(religigranti$muslims, y = religigranti$emigracija, use = "na.or.complete")
   
   
 # # Izračun neto migracije za posamezne države skozi čas
