@@ -13,21 +13,19 @@ ui <- fluidPage(
                                          "HDI (human development index)" = "HDI"),
                              selected = "BDP"),
                  br(),
-                 # selectInput(inputId = "skala",
-                 #             label = "2. Skala za podatke",
-                 #             choices = c("x in y logaritmirana" = "xy",
-                 #                         "x logaritmiran" = "x",
-                 #                         "y logaritmiran" = "y",
-                 #                         "normalno" = "n"), selected = "xy"),
+                 selectInput(inputId = "skala",
+                             label = "2. Skala za podatke",
+                             choices = c("x in y logaritmirana" = "xy",
+                                         "x logaritmiran" = "x",
+                                         "y logaritmiran" = "y",
+                                         "normalno" = "n"), selected = "xy"),
                  br(),
                  radioButtons(inputId = "emiimi",
                               label = "3. Vstop ali izstop",
                               choices = c("imigracija", "emigracija")),
-                 # br(),
-                 # actionButton(inputId = "reg",
-                 #              label = "4. Regresijska premica",
-                 #              icon = "regresija")
-
+                 br(),
+                 actionButton(inputId = "reg",
+                              label = "Regresijska premica")
                  ),
     mainPanel(plotOutput("grafk"))
   )
