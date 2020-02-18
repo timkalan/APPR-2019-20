@@ -1,5 +1,5 @@
 ---
-title: "Poročilo pri predmetu Analiza podatkov s programom R - Migracija po svetu"
+title: "Migracija po svetu"
 author: "Tim Kalan"
 output:
   html_document: default
@@ -24,10 +24,11 @@ source("lib/libraries.r", encoding="UTF-8")
 source("lib/rstudio.r", encoding="UTF-8")
 ```
 
-# Izbira teme
+# Nekaj o temi
 
-Spodaj je prikazanih nekaj podatkov o migraciji po svetu. Zajeta je večina svetovnih držav (za nekatere enostavno
-ni vseh podatkov) in obdobje od leta 1960 do 2010 (razpon podatkov o migraciji).
+Spodaj je prikazanih nekaj podatkov o migraciji po svetu. Zajeta je velika večina svetovnih držav, 
+za vse podatke vsaj 180. Razlog, da ni vseh je enostavno to, da ni podatkov za njih. Opazovali smo 
+časovno obdobje med letom 1990 in 2019.
 
 ![](slike/migracija.jpg)
 
@@ -37,8 +38,9 @@ ni vseh podatkov) in obdobje od leta 1960 do 2010 (razpon podatkov o migraciji).
 source("uvoz/uvoz.r", encoding="UTF-8")
 ```
 
-Uvozili smo podatke o migraciji, populaciji, religiji in izobrazbi v obliki CSV iz raznih spletnih strani (navedenih v README-ju), 
-poleg tega pa še podatke o BDP-ju držav skozi čas v obliki HTML iz Wikipedije. Podatke imamo v dveh razpredelnicah v 
+Uvozili smo podatke o emigraciji in imigraciji, populaciji, verski strukturi, izobrazbi in indeksu človekovega razvoja
+v obliki CSV iz raznih spletnih strani, ki so natančno navedene v "README.md", 
+poleg tega pa še podatke o BDP-ju držav skozi čas v obliki HTML iz Wikipedije. Podatke imamo v štirih razpredelnicah v 
 obliki *tidy data*. 
 
 <!-- 1. `poSpolih` - podatki o migraciji ljudi -->
@@ -80,27 +82,10 @@ obliki *tidy data*.
   - `other` - meritev: število pripadnikov drugim religijam v državi (število),
   - `jews` - meritev: število judov v državi (število).
 
-**Opomba**: Tabela `drzave` ni v *tidy data*, saj je BDP na prebivalca veliko bolj relevantana metrika, a je
-            izpeljana iz stolpcev `BDP` in `populacija`. 
+**Opomba**: Tabela `drzave` ni v *tidy data*, saj je BDP na prebivalca izpeljana iz stolpcev `BDP` in `populacija`.
+            Obdržali smo jo v tabeli, ker je veliko bolj relevantna metrika, kot BDP.
             HDI (human development index) je indeks, ki združuje izobazbo (pričakovano število let šolanja), BDP na
             prebivalca in pričakovano življenjsko dobo. Povzame razvitost države.
-
-
-Spodnji graf prikazuje migracijo v sloveniji v zadnjih petdesetih letih (placeholder?).
-
-```{r histogram, echo=FALSE, message=FALSE, fig.align='center', fig.cap='Slovenska migracija'}
-# sloIZ <- poSpolih %>% filter(origin_country == "Slovenia") %>% select(-"origin_country") %>%
-#   group_by(gender, decade) %>% summarise(izselitev = sum(number, na.rm = TRUE))
-# sloV <- poSpolih %>% filter(dest_country == "Slovenia") %>% select(-"dest_country") %>%
-#   group_by(gender, decade) %>% summarise(vselitev = sum(number, na.rm = TRUE))
-# svn <- inner_join(sloIZ, sloV, by = c("gender", "decade"))
-# svn$izselitev <- svn$izselitev * (-1)
-# ggplot(svn, aes(x = decade, y = vselitev, fill = gender)) + 
-#   geom_bar(stat = "identity", position=position_dodge(), color = "black") + 
-#   geom_bar(aes(x = decade, y = izselitev), stat = "identity", position=position_dodge(), color = "black") +
-#   xlab("Desetletje") + ylab("izselitev/vselitev")
-  
-```
 
 ***
 
@@ -111,23 +96,37 @@ source("vizualizacija/vizualizacija.r", encoding="UTF-8")
 source("analiza/analiza.r", encoding="UTF-8")
 ```
 
-Graf prikazuje povezavo med BDP-jem države in število priseljencev (skupno), ker pa ni moč opaziti
-močne korelacije, bo po vsej verjetnosti zamenjan.
+Graf prikazuje količino vseh svetovnih migrantov v opazovanem obdobju, razdeljenih glede na starost, 
+škatla pa dodatno pove, kako se je to število spreminjalo skozi leta.
 
 ```{r graf, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 starostLeta
-grafBdp
 ```
 
-Spodnji zemljevid prikazuje države, razvrščene po deležu priseljencev glede na celotno populacijo leta 2018.
+Opazimo, da je največ priseljencev starih med 30 in 40 let, hkrati pa se je njihova količina tudi najbolj
+spreminjala. Število migrantov vseh starosti je skozi obdobje rastlo. Sklepamo, da je najstarejših migrantov 
+nenavadno več od malce mlajših, ker je v njihopvo skupino zajeto več možnih starosti.
+
+V nadaljevanju smo si ogledali, kakšen delež populacije posamezne države predstavljajo migranti, nato pa smo 
+države še razdelili v skupine in opazili vsaj delno ujemanje. Prikazano je na spodnjih zemljevidih.
 
 ```{r zemljevid, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center', fig.cap='Zemljevid deleža priseljencev'}
 zemStock
+```
+
+```{r cluster, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center', fig.cap='Države po skupinah'}
 zemCluster
 ```
+
+Ker je veliko držav z relativno majhnim deležem priseljencev, so bile na prvem zemljevidu dane v isto 
+kategorijo, medtem ko je R skozi *clustering* te skupine izbral bolj pametno.
 
 ***
 
 ```{r shiny, echo=FALSE}
 shinyAppDir("shiny", options=list(width="100%", height=600))
 ```
+
+Iz zgornjega interaktivnega grafa lahko opacimo močno korelacijo med imigracijo oz. emigracijo in BDP-jem 
+države. Ob natančnem pregledu in primerjavo z BDP per capita in populacijo opazimo, da je ta povezava 
+posledica naraščanja populacije in ne zares efektivnega BDP.

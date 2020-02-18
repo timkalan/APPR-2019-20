@@ -13,19 +13,29 @@ ui <- fluidPage(
                                          "HDI (human development index)" = "HDI"),
                              selected = "BDP"),
                  br(),
-                 selectInput(inputId = "skala",
-                             label = "2. Skala za podatke",
-                             choices = c("x in y logaritmirana" = "xy",
-                                         "x logaritmiran" = "x",
-                                         "y logaritmiran" = "y",
-                                         "normalno" = "n"), selected = "xy"),
-                 br(),
                  radioButtons(inputId = "emiimi",
-                              label = "3. Vstop ali izstop",
+                              label = "2. Vstop ali izstop",
                               choices = c("imigracija", "emigracija")),
                  br(),
-                 actionButton(inputId = "reg",
-                              label = "Regresijska premica")
+                 selectInput(inputId = "reg",
+                              label = "3. Prileganje podatkom", 
+                             choices = c("Brez regresije" = "br", 
+                                         "Linearna regresija" = "lm", 
+                                         "LOESS" = "loess", 
+                                         "GAM" = "gam"), 
+                             selected = "br"),
+                 br(),
+                 # selectInput(inputId = "skala",
+                 #             label = "4. Skala za podatke",
+                 #             choices = c("x in y logaritmirana" = "xy",
+                 #                         "x logaritmiran" = "x",
+                 #                         "y logaritmiran" = "y",
+                 #                         "normalno" = "n"), selected = "xy")
+                 checkboxGroupInput(inputId = "skala",
+                                    label = "4. Skala za podatke",
+                                    choices = c("x logaritmiran" = "x", 
+                                                "y logaritmiran" = "y"), 
+                                    selected = c("x", "y"))
                  ),
     mainPanel(plotOutput("grafk"))
   )
@@ -36,8 +46,14 @@ server <- function(input, output) {
   output$grafk <- renderPlot(
     ggplot(master, aes(x = master[, input$podatek], 
                        y = master[, input$emiimi])) + 
-      geom_point() + 
-      scale_x_log10() + scale_y_log10()
+      geom_point() + xlab(input$podatek) + ylab(input$emiimi) +
+      ggtitle(paste0(
+        input$emiimi, 
+        " glede na ", 
+        input$podatek, 
+        " (vsaka točka predstavlja eno državo sveta)  ")) +
+      scale_x_log10() + scale_y_log10() + 
+      geom_smooth(method = input$reg)
   )
 }
 
