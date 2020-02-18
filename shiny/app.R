@@ -43,20 +43,59 @@ ui <- fluidPage(
 
 
 server <- function(input, output) {
-  output$grafk <- renderPlot(
-    ggplot(master, aes(x = master[, input$podatek], 
-                       y = master[, input$emiimi])) + 
-      geom_point() + xlab(input$podatek) + ylab(input$emiimi) +
-      ggtitle(paste0(
-        input$emiimi, 
-        " glede na ", 
-        input$podatek, 
-        " (vsaka točka predstavlja eno državo sveta)  ")) +
-      scale_x_log10() + scale_y_log10() + 
-      geom_smooth(method = input$reg)
-  )
+  x <- reactive({input$skala})
+  y <- reactive({
+    if (length(x()) == 2) {
+      ggplot(master, aes(x = master[, input$podatek],
+                         y = master[, input$emiimi])) +
+        geom_point() + xlab(input$podatek) + ylab(input$emiimi) +
+        ggtitle(paste0(
+          input$emiimi,
+          " glede na ",
+          input$podatek,
+          " (vsaka točka predstavlja eno državo sveta)  ")) +
+        geom_smooth(method = input$reg) + scale_x_log10() + 
+        scale_y_log10()
+    }
+    else if (length(x()) == 1) {
+      if (x() == "x") {
+        ggplot(master, aes(x = master[, input$podatek],
+                           y = master[, input$emiimi])) +
+          geom_point() + xlab(input$podatek) + ylab(input$emiimi) +
+          ggtitle(paste0(
+            input$emiimi,
+            " glede na ",
+            input$podatek,
+            " (vsaka točka predstavlja eno državo sveta)  ")) +
+          geom_smooth(method = input$reg) + scale_x_log10()
+      }
+      else {
+        ggplot(master, aes(x = master[, input$podatek],
+                           y = master[, input$emiimi])) +
+          geom_point() + xlab(input$podatek) + ylab(input$emiimi) +
+          ggtitle(paste0(
+            input$emiimi,
+            " glede na ",
+            input$podatek,
+            " (vsaka točka predstavlja eno državo sveta)  ")) +
+          geom_smooth(method = input$reg) + scale_y_log10()
+      }
+    }
+    else {
+      ggplot(master, aes(x = master[, input$podatek],
+                         y = master[, input$emiimi])) +
+        geom_point() + xlab(input$podatek) + ylab(input$emiimi) +
+        ggtitle(paste0(
+          input$emiimi,
+          " glede na ",
+          input$podatek,
+          " (vsaka točka predstavlja eno državo sveta)  ")) +
+        geom_smooth(method = input$reg)
+    }
+  })
+  output$grafk <- renderPlot(y())
 }
 
 
-
+  
 shinyApp(ui = ui, server = server)
