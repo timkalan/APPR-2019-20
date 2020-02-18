@@ -29,7 +29,17 @@ starostLeta <- ggplot(starostneSkupine %>%
                         group_by(year, age) %>%
                         summarise(number = sum(number, na.rm = TRUE)), 
                       aes(x = age, y = number)) + 
-  geom_boxplot()
+  geom_boxplot() +
+  geom_line(data = starostneSkupine %>% group_by(age, year) %>%
+                               summarise(povp = sum(number, na.rm = TRUE)) %>%
+               group_by(age) %>% summarise(med = median(povp)),
+                             aes(x = age, y = med, group = 1, color = "red"), 
+            show.legend = FALSE) + 
+  xlab("Starost (leta)") + ylab("Število migrantov") + 
+  ggtitle("Število migrantov glede na starost v obdobju 1990-2019")
+
+
+
 
 
 # GRAF - države (to bi rad naredil v shiny) ####
