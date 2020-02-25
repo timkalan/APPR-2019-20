@@ -121,6 +121,10 @@ zemCluster
 Ker je veliko držav z relativno majhnim deležem priseljencev, so bile na prvem zemljevidu dane v isto 
 kategorijo, medtem ko je R skozi *clustering* te skupine izbral bolj pametno.
 
+```{r bar, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center'}
+grafDrreg
+```
+
 ***
 
 ```{r shiny, echo=FALSE}

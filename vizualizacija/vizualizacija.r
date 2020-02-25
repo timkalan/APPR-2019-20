@@ -81,8 +81,17 @@ religigranti <- religije %>% inner_join(emigracija %>%
              by = c("country")) %>%
   arrange(country, desc(procent))
 
-dominantna <- unique(religigranti)
-# 
+dominantna <- distinct(religigranti, country, .keep_all = TRUE) %>% 
+  mutate(emigracija = emigracija / populacija, imigracija = imigracija / populacija)
+
+grafDominantna <- ggplot(dominantna %>% select(-"procent", -"populacija") %>%
+                 gather(preseljevanje, delez, 3:4), aes(x = delez, fill = preseljevanje)) + 
+  geom_histogram() + facet_grid(religija~.)
+ 
+grafDrreg <- ggplot(dominantna %>% arrange(religija, desc(emigracija)) %>% 
+                      mutate(country = 1:168), aes(x = country, y = emigracija, fill = religija) ) + geom_col()
+
+
 # muslimani <- ggplot(religigranti, 
 #                     aes(x = muslims, y = emigracija)) + 
 #   geom_point() + scale_x_log10() + scale_y_log10()
