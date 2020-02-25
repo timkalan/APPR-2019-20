@@ -1,10 +1,13 @@
+# ZEMLJEVID - CLUSTERING ####
 skupineDelez <- kmeans(delezi$delez, 5, nstart = 1500)
 zemCluster <- tm_shape(merge(svet, data.frame(country = delezi$country, skupina = factor(skupineDelez$cluster)), 
                              by.x = "NAME", by.y = "country")) + 
   tmap_options(max.categories = 5) + 
   tm_polygons("skupina")
 
-# korelacijski oblak
+
+
+# DRŽAVE - korelacijski oblak (v shiny) ####
 grafBdp <- grafBdp + geom_smooth(method = "lm")
 # to morda logaritmiraš?
 korelacija <- cor(master$BDP, y = master$imigracija, use = "na.or.complete")
