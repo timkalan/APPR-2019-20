@@ -14,6 +14,7 @@ zemStock <- tm_shape(merge(svet, delezi,
   tm_polygons("delez", midpoint = 0.4)
 
 
+
 # GRAF - starostne skupine ####
 starostneSkupine <- stock %>% 
   filter(age != "total") %>%
@@ -40,9 +41,7 @@ starostLeta <- ggplot(starostneSkupine %>%
 
 
 
-
-
-# GRAF - države (to bi rad naredil v shiny) ####
+# GRAF - države (to je v shiny) ####
 emigracija <- migranti %>% group_by(origin, Year) %>%
   summarise(number = sum(number, na.rm = TRUE))
 imigracija <- migranti %>% group_by(destination, Year) %>%
@@ -69,63 +68,24 @@ grafHDI <- ggplot(master, aes(x = HDI, y = imigracija)) + geom_point() +
   scale_y_log10()
 
 
+
 # RELIGIJE (2019) ####
-religigranti <- religije %>% inner_join(emigracija %>% 
-                                          filter(Year == "2019"), 
+religigranti <- religije %>% inner_join(emigracija %>%
+                                          filter(Year == "2019"),
                                         by = c("country" = "origin")) %>%
-  select(-"Year", emigracija = number) %>% inner_join(imigracija %>% filter(Year == "2019"), 
+  select(-"Year", emigracija = number) %>% inner_join(imigracija %>% filter(Year == "2019"),
                                  by = c("country" = "destination")) %>%
   select(-"Year", imigracija = number) %>%
   inner_join(drzave %>% filter(leto == "2019") %>%
-               select(-"leto", -"BDP", -"izobrazenost", -"HDI", -"BDPpc"), 
-             by = c("country"))
+               select(-"leto", -"BDP", -"izobrazenost", -"HDI", -"BDPpc"),
+             by = c("country")) %>%
+  arrange(country, desc(procent))
 
-muslimani <- ggplot(religigranti, 
-                    aes(x = muslims, y = emigracija)) + 
-  geom_point() + scale_x_log10() + scale_y_log10()
-#   geom_smooth(method = "gam")
-# cor(religigranti$muslims, y = religigranti$emigracija, use = "na.or.complete")
-  
-  
-# # Izračun neto migracije za posamezne države skozi čas
-# izhod <- skupno %>% group_by(origin_country, decade) %>%
-#   summarise(izhod=sum(number, na.rm=TRUE)) %>%
-#   rename(country = origin_country)
+dominantna <- unique(religigranti)
 # 
-# prihod <- skupno %>% group_by(dest_country, decade) %>%
-#   summarise(prihod=sum(number, na.rm=TRUE)) %>%
-#   rename(country = dest_country)
-# 
-# # to zdaj ni tidy data
-# neto <- inner_join(izhod, prihod, by = c("country", "decade")) %>%
-#   mutate(neto_imigracija = prihod - izhod)
-# 
-# # kot zgoraj, samo razdeljeno po spolih
-# izhodS <- poSpolih %>% group_by(origin_country, decade, gender) %>%
-#   summarise(izhod=sum(number, na.rm=TRUE)) %>%
-#   rename(country = origin_country)
-# 
-# prihodS <- poSpolih %>% group_by(dest_country, decade, gender) %>%
-#   summarise(prihod=sum(number, na.rm=TRUE)) %>%
-#   rename(country = dest_country)
-# 
-# netoSpoli <- inner_join(izhodS, prihodS, by = c("country", "decade", "gender")) %>%
-#   mutate(neto_imigracija = prihod - izhod)
-# 
-# kolicina <- netoSpoli %>% group_by(country, gender) %>%
-#   summarise(priselitev = sum(prihod, na.rm = TRUE))
-# 
-# 
-# # GRAFI
-# 
-# desetletja <- ggplot(neto, aes(x = decade, y = neto_imigracija)) + geom_point()
-# 
-# # se izkaže za nezanimiv graf
-# kolicina <- kolicina %>% inner_join(drzave %>% filter(leto == 2000), by = c("country")) %>%
-#   select(-"leto")
-# 
-# zemPriselitev <- tm_shape(merge(svet, kolicina %>% group_by(country, BDP) %>% 
-#                  summarise(priselitev = sum(priselitev, na.rm = TRUE)), by.x = "NAME", by.y = "country")) + tm_polygons("priselitev")
-
-
+# muslimani <- ggplot(religigranti, 
+#                     aes(x = muslims, y = emigracija)) + 
+#   geom_point() + scale_x_log10() + scale_y_log10()
+# #   geom_smooth(method = "gam")
+# # cor(religigranti$muslims, y = religigranti$emigracija, use = "na.or.complete")
 

@@ -1,19 +1,4 @@
 # MIGRACIJA ####
-# migracija <- read_csv("podatki/migracija.csv", n_max = 160776, na = c("..")) %>%
-#   select(-"Migration by Gender Code", -"Country Origin Code", -"Country Dest Code")
-# 
-# colnames(migracija) <- c("origin_country", "gender", "dest_country",
-#                          "1960-1969", "1970-1979", "1980-1989", "1990-1999", "2000-2010")
-# 
-# skupno <- migracija %>% filter(gender=="Total") %>% select(-"gender") %>%
-#   gather(decade, number, "1960-1969", "1970-1979", "1980-1989", "1990-1999", "2000-2010") %>%
-#   arrange(origin_country)
-# 
-# poSpolih <- migracija %>% filter(gender=="Female" | gender=="Male" ) %>%
-#   gather(decade, number, "1960-1969", "1970-1979", "1980-1989", "1990-1999", "2000-2010") %>%
-#   arrange(origin_country)
-# poSpolih <- poSpolih[c(1,3,2,4,5)]
-
 stock <- read_xlsx("podatki/UNstock.xlsx", sheet = 2, range = "A15:BE1997", na = "..")
 stock <- stock[!is.na(stock$`Type of data (a)`),] %>% 
   select(-"Type of data (a)", -"Notes", -"Code", country="Major area, region, country or area of destination")
@@ -54,6 +39,7 @@ migranti <- migranti %>% gather(origin, number, "Total":"Zimbabwe") %>%
 migranti <- migranti[c(3, 2, 1, 4)] %>% mutate(number = as.numeric(number))
 
 
+
 # BDP (wikipedia) ####
 url <- "https://en.wikipedia.org/wiki/List_of_countries_by_past_and_projected_GDP_(PPP)"
 stran <- read_html(url)
@@ -87,6 +73,7 @@ bdp$BDP <- bdp$BDP * 1000000
 bdp[, 2] <- sapply(bdp[, 2], as.numeric)
 
 
+
 # POPULACIJA ####
 pop <- read.csv2("podatki/populacija.csv", skip = 16) %>% 
   filter(Type=="Country/Area") %>%
@@ -101,11 +88,16 @@ pop <- pop[, c(1, 12:72)] %>% arrange(country) %>%
 pop$populacija <- pop$populacija * 1000
 pop$leto <- as.numeric(pop$leto)
 
+
+
 # RELIGIJE ####
 religije <- read_csv("podatki/religije.csv", na = c("5000")) %>%
 # 5000 v podatkih pomeni zanemarljivo malo
-  rename(country = name) %>%
-  select(-"pop2019") 
+  rename(country = name, christians = chistians) %>%
+  mutate(pop2019 = pop2019 * 1000)
+religije <- cbind(religije[, 1], round(religije[, 2:9] / religije$pop2019, digits = 4) * 100) %>%
+  gather(religija, procent, 2:9) %>% arrange(country)
+
 
 
 # IZOBRAZBA in HDI####
@@ -120,20 +112,18 @@ hdi <- Filter(function(x)!all(is.na(x)), hdi) %>%
 hdi$leto <- as.numeric(hdi$leto)
 
 
-# popravljanje imen ####
+
+# POPRAVLJANJE IMEN ####
 # to bi lahko bilo lepše napisano, a je v trenutni verziji paketa napaka
 bdp$country <- standardize.countrynames(bdp$country, suggest = "auto", print.changes = FALSE)
 pop$country <- standardize.countrynames(pop$country, suggest = "auto", print.changes = FALSE)
-# poSpolih$origin_country <- standardize.countrynames(poSpolih$origin_country, suggest = "auto", print.changes = FALSE)
-# poSpolih$dest_country <- standardize.countrynames(poSpolih$dest_country, suggest = "auto", print.changes = FALSE)
-# skupno$origin_country <- standardize.countrynames(skupno$origin_country, suggest = "auto", print.changes = FALSE)
-# skupno$dest_country <- standardize.countrynames(skupno$dest_country, suggest = "auto", print.changes = FALSE)
 religije$country <- standardize.countrynames(religije$country, suggest = "auto", print.changes = FALSE)
 izobrazba$Country <- standardize.countrynames(izobrazba$Country, suggest = "auto", print.changes = FALSE)
 hdi$Country <- standardize.countrynames(hdi$Country, suggest = "auto", print.changes = FALSE)
 stock$country <- standardize.countrynames(stock$country, suggest = "auto", print.changes = FALSE)
 migranti$origin <- standardize.countrynames(migranti$origin, suggest = "auto", print.changes = FALSE)
 migranti$destination <- standardize.countrynames(migranti$destination, suggest = "auto", print.changes = FALSE)
+
 
 
 # DRZAVE ####
@@ -144,8 +134,9 @@ drzave <- filter(bdp, leto > 1989 & leto < 2019) %>%
   mutate(BDPpc=BDP/populacija)
 
 
-rm(devetdeseta, dvadeseta, dvatisoca, migracija, osemdeseta, 
+rm(devetdeseta, dvadeseta, dvatisoca, osemdeseta, 
    stran, bdpji, url, bdp, izobrazba, hdi, pop, stockF, stockM, imena)
+
 
 
 # ZEMLJEVID ####
@@ -153,60 +144,3 @@ svet <- uvozi.zemljevid(
   "http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip",
   "ne_50m_admin_0_countries", encoding="UTF-8")
 svet$NAME <- standardize.countrynames(svet$NAME, suggest = "auto", print.changes = FALSE) 
-
-
-# # 2. faza: Uvoz podatkov
-# 
-# sl <- locale("sl", decimal_mark=",", grouping_mark=".")
-# 
-# # Funkcija, ki uvozi občine iz Wikipedije
-# uvozi.obcine <- function() {
-#   link <- "http://sl.wikipedia.org/wiki/Seznam_ob%C4%8Din_v_Sloveniji"
-#   stran <- html_session(link) %>% read_html()
-#   tabela <- stran %>% html_nodes(xpath="//table[@class='wikitable sortable']") %>%
-#     .[[1]] %>% html_table(dec=",")
-#   for (i in 1:ncol(tabela)) {
-#     if (is.character(tabela[[i]])) {
-#       Encoding(tabela[[i]]) <- "UTF-8"
-#     }
-#   }
-#   colnames(tabela) <- c("obcina", "povrsina", "prebivalci", "gostota", "naselja",
-#                         "ustanovitev", "pokrajina", "regija", "odcepitev")
-#   tabela$obcina <- gsub("Slovenskih", "Slov.", tabela$obcina)
-#   tabela$obcina[tabela$obcina == "Kanal ob Soči"] <- "Kanal"
-#   tabela$obcina[tabela$obcina == "Loški potok"] <- "Loški Potok"
-#   for (col in c("povrsina", "prebivalci", "gostota", "naselja", "ustanovitev")) {
-#     if (is.character(tabela[[col]])) {
-#       tabela[[col]] <- parse_number(tabela[[col]], na="-", locale=sl)
-#     }
-#   }
-#   for (col in c("obcina", "pokrajina", "regija")) {
-#     tabela[[col]] <- factor(tabela[[col]])
-#   }
-#   return(tabela)
-# }
-# 
-# # Funkcija, ki uvozi podatke iz datoteke druzine.csv
-# uvozi.druzine <- function(obcine) {
-#   data <- read_csv2("podatki/druzine.csv", col_names=c("obcina", 1:4),
-#                     locale=locale(encoding="Windows-1250"))
-#   data$obcina <- data$obcina %>% strapplyc("^([^/]*)") %>% unlist() %>%
-#     strapplyc("([^ ]+)") %>% sapply(paste, collapse=" ") %>% unlist()
-#   data$obcina[data$obcina == "Sveti Jurij"] <- iconv("Sveti Jurij ob Ščavnici", to="UTF-8")
-#   data <- data %>% gather(`1`:`4`, key="velikost.druzine", value="stevilo.druzin")
-#   data$velikost.druzine <- parse_number(data$velikost.druzine)
-#   data$obcina <- parse_factor(data$obcina, levels=obcine)
-#   return(data)
-# }
-# 
-# # Zapišimo podatke v razpredelnico obcine
-# obcine <- uvozi.obcine()
-# 
-# # Zapišimo podatke v razpredelnico druzine.
-# druzine <- uvozi.druzine(levels(obcine$obcina))
-# 
-# # Če bi imeli več funkcij za uvoz in nekaterih npr. še ne bi
-# # potrebovali v 3. fazi, bi bilo smiselno funkcije dati v svojo
-# # datoteko, tukaj pa bi klicali tiste, ki jih potrebujemo v
-# # 2. fazi. Seveda bi morali ustrezno datoteko uvoziti v prihodnjih
-# # fazah.
