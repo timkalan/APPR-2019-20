@@ -89,7 +89,7 @@ grafDominantna <- ggplot(dominantna %>% select(-"procent", -"populacija") %>%
   geom_histogram() + facet_grid(religija~.)
  
 grafDrreg <- ggplot(dominantna %>% arrange(religija, desc(emigracija)) %>% 
-                      mutate(country = 1:168), aes(x = country, y = emigracija, fill = religija) ) + geom_col()
+                      mutate(country = 1:174), aes(x = country, y = emigracija, fill = religija) ) + geom_col()
 
 
 # muslimani <- ggplot(religigranti, 
