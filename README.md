@@ -1,4 +1,4 @@
-# Analiza podatkov s programom R, 2019/20
+# Migracija po svetu
 
 Repozitorij z gradivi pri predmetu APPR v študijskem letu 2019/20
 
