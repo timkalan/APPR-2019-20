@@ -114,7 +114,12 @@ zemCluster
 ```
 
 Ker je veliko držav z relativno majhnim deležem priseljencev, so bile na prvem zemljevidu dane v isto 
-kategorijo, medtem ko je R skozi *clustering* te skupine izbral bolj pametno.
+kategorijo, zato je graf relativno nepreglden in nezanimiv. Vseeno lahko vidimo, da je država z največjim
+deležem priseljencev Združeni Arabski Emirati, ki ima res izjemno velik delež priseljencev, nekje med 80%
+in 100%. Ostale države so glede priseljencev bolj umirjene.      
+Ker pa smo hoteli bolj pregleden graf, pa smo izvedli še *clustering*, in tako poskušali države razdeliti v 
+kar se da smiselne skupine, ki se vseeno ujemajo s prvim zemljevidom. S to metodo smo tako države razdelili 
+v najbokjše kategorije z najmanjšim odstopanjem od povprečja znotraj skupin. 
 
 ***
 
@@ -140,11 +145,22 @@ opazimo nekatere zanimivosti:
 ***
 
 ```{r shiny, echo=FALSE}
-shinyAppDir("shiny", options=list(width="100%", height=600))
+shinyAppDir("shiny", options=list(width="100%", height=700))
 ```
 
-Iz zgornjega interaktivnega grafa lahko opazimo močno korelacijo med imigracijo oz. emigracijo in BDP-jem 
-države. Ob natančnem pregledu in primerjavo z BDP per capita in populacijo opazimo, da je ta povezava 
-posledica naraščanja populacije in ne zares efektivnega BDP.
+Iz zgornjega interaktivnega grafa sprva opazimo močno korelacijo med imigracijo oz. emigracijo in BDP-jem 
+države. Ob natančnem pregledu in primerjavo z grafoma, kjer BDP nadomestimo z BDP per capita oziroma populacijo
+ugotovimo, da je zelo verjetno korelacija posledica naraščajoče populacije in ni zares tesno povezana z 
+BDP-jem države. 
+
+Zanimivo je tudi, da med preseljevanjem ljudi in stopnjo izobraženosti oziroma indeksom človekovega razvoja ni 
+zares nobene močne povezave, med temi spremenljivkami je največji korelacijski koeficient 0,25, kar je zelo malo
+v primerjavi z nekaterimi drugimi povezavami. Pri natančnem pregledu grafa morda lahko opazimo, da je pri nekaterih
+državah z visokimi indeksi občuten poskok v imigraciji, a je teh primerov tako malo, da bi lahko zares govorili o 
+kakšni korelaciji.
+
+***
+
+# Napovedovanje migracije v prihodnosti 
 
 ***
