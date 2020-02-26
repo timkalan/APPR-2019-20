@@ -37,7 +37,7 @@ ui <- fluidPage(
                                                 "y logaritmiran" = "y"), 
                                     selected = c("x", "y"))
                  ),
-    mainPanel(plotOutput("grafk"))
+    mainPanel(plotOutput("grafk", height = "500px"))
   )
 )
 

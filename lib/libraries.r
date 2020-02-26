@@ -10,6 +10,7 @@ library(ggplot2)
 library(tmap)
 library(StandardizeText)
 library(readxl)
+library(plotly)
 
 # Uvozimo funkcije za pobiranje in uvoz zemljevida.
 source("lib/uvozi.zemljevid.r", encoding="UTF-8")

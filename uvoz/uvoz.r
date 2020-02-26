@@ -95,8 +95,10 @@ religije <- read_csv("podatki/religije.csv", na = c("5000")) %>%
 # 5000 v podatkih pomeni zanemarljivo malo
   rename(country = name, christians = chistians) %>%
   mutate(pop2019 = pop2019 * 1000)
+colnames(religije) <- c("country", "Kristjani", "Muslimani", "Neopredeljeni", "Hinduisti", 
+                        "Budisti", "Pogani", "Drugo", "Judje", "pop2019")
 religije <- cbind(religije[, 1], round(religije[, 2:9] / religije$pop2019, digits = 4) * 100) %>%
-  gather(religija, procent, 2:9) %>% arrange(country)
+  gather(Religija, procent, 2:9) %>% arrange(country)
 
 
 
