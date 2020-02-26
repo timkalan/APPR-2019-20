@@ -25,29 +25,42 @@ ui <- fluidPage(
                                          "GAM" = "gam"), 
                              selected = "br"),
                  br(),
-                 # selectInput(inputId = "skala",
-                 #             label = "4. Skala za podatke",
-                 #             choices = c("x in y logaritmirana" = "xy",
-                 #                         "x logaritmiran" = "x",
-                 #                         "y logaritmiran" = "y",
-                 #                         "normalno" = "n"), selected = "xy")
                  checkboxGroupInput(inputId = "skala",
                                     label = "4. Skala za podatke",
                                     choices = c("x logaritmiran" = "x", 
                                                 "y logaritmiran" = "y"), 
-                                    selected = c("x", "y"))
+                                    selected = c("x", "y")),
+                 br(),
+                 selectInput(inputId = "cajt",
+                             label = "5. Časovno obdobje",
+                             choices = c("Skupaj" = "sku",
+                                         2019, 2015, 2010, 2005, 2000, 1995, 1990),
+                             selected = "sku"),
                  ),
-    mainPanel(plotOutput("grafk", height = "500px"))
+    mainPanel(plotOutput("grafk", height = "550px"), 
+              tableOutput("tabelca"))
   )
 )
 
+# master <- master %>% filter(leto == 2010)
 
 server <- function(input, output) {
   x <- reactive({input$skala})
+  
+  podatkici <- reactive({
+    if (input$cajt == "sku") {
+      master 
+    }
+    else {
+      master %>% filter(leto == input$cajt)
+    }
+  })
+  
   y <- reactive({
+    pod <- podatkici()
     if (length(x()) == 2) {
-      ggplot(master, aes(x = master[, input$podatek],
-                         y = master[, input$emiimi])) +
+      ggplot(data = pod, aes(x = pod[, input$podatek],
+                         y = pod[, input$emiimi])) +
         geom_point() + xlab(input$podatek) + ylab(input$emiimi) +
         ggtitle(paste0(
           input$emiimi,
@@ -59,8 +72,8 @@ server <- function(input, output) {
     }
     else if (length(x()) == 1) {
       if (x() == "x") {
-        ggplot(master, aes(x = master[, input$podatek],
-                           y = master[, input$emiimi])) +
+        ggplot(pod, aes(x = pod[, input$podatek],
+                           y = pod[, input$emiimi])) +
           geom_point() + xlab(input$podatek) + ylab(input$emiimi) +
           ggtitle(paste0(
             input$emiimi,
@@ -70,8 +83,8 @@ server <- function(input, output) {
           geom_smooth(method = input$reg) + scale_x_log10()
       }
       else {
-        ggplot(master, aes(x = master[, input$podatek],
-                           y = master[, input$emiimi])) +
+        ggplot(pod, aes(x = pod[, input$podatek],
+                           y = pod[, input$emiimi])) +
           geom_point() + xlab(input$podatek) + ylab(input$emiimi) +
           ggtitle(paste0(
             input$emiimi,
@@ -82,8 +95,8 @@ server <- function(input, output) {
       }
     }
     else {
-      ggplot(master, aes(x = master[, input$podatek],
-                         y = master[, input$emiimi])) +
+      ggplot(pod, aes(x = pod[, input$podatek],
+                         y = pod[, input$emiimi])) +
         geom_point() + xlab(input$podatek) + ylab(input$emiimi) +
         ggtitle(paste0(
           input$emiimi,
@@ -94,6 +107,18 @@ server <- function(input, output) {
     }
   })
   output$grafk <- renderPlot(y())
+  
+  output$tabelca <- renderTable({
+    pod <- podatkici()
+    pod %>% 
+      summarise("Korelacijski koeficient" = cor(pod[, input$podatek], 
+                                                y = pod[, input$emiimi], use = "na.or.complete"),
+                # "Povprečje" = mean(master[, input$podatek], na.rm = TRUE),
+                # "Mediana" = median(master[, input$podatek], na.rm = TRUE), 
+                # "Min" = min(master[, input$podatek], na.rm = TRUE), 
+                # "Max" = max(master[, input$podatek], na.rm = TRUE)
+                )
+    })
 }
 
 
