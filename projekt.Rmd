@@ -32,6 +32,8 @@ za vse podatke vsaj 180. Razlog, da ni vseh je enostavno to, da ni podatkov za n
 
 ![](slike/migracija.jpg)
 
+***
+
 # Obdelava, uvoz in čiščenje podatkov
 
 ```{r uvoz, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
@@ -42,13 +44,6 @@ Uvozili smo podatke o emigraciji in imigraciji, populaciji, verski strukturi, iz
 v obliki CSV iz raznih spletnih strani, ki so natančno navedene v "README.md", 
 poleg tega pa še podatke o BDP-ju držav skozi čas v obliki HTML iz Wikipedije. Podatke imamo v štirih razpredelnicah v 
 obliki *tidy data*. 
-
-<!-- 1. `poSpolih` - podatki o migraciji ljudi -->
-<!--   - `origin_country` - spremenljivka: ime države, iz katere so se ljudje izseljevali (besedilo), -->
-<!--   - `dest_country` - spremenljivka: ime države, v katero so se ljudje vseljevali (besedilo), -->
-<!--   - `gender` - spremenljivka: spol izseljenca (oz. priseljenca) (besedilo), -->
-<!--   - `decade` - spremenljivka: desetletje, v katerem se je preseljevanje dogajalo (besedilo), -->
-<!--   - `number` - meritev: število ljudi, ki se je preselilo iz origin v dest v desetletju decade (število: med 0 in 5200000). -->
   
 1. `migranti` - podatki o migraciji ljudi
   - `origin` - spremenljivka: ime države, iz katere so se ljudje izseljevali (besedilo),
@@ -89,7 +84,7 @@ obliki *tidy data*.
 
 ***
 
-# Analiza in vizualizacija podatkov
+# Zaloga migrantov (migrant stock)
 
 ```{r vizualizacija, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 source("vizualizacija/vizualizacija.r", encoding="UTF-8")
@@ -121,9 +116,26 @@ zemCluster
 Ker je veliko držav z relativno majhnim deležem priseljencev, so bile na prvem zemljevidu dane v isto 
 kategorijo, medtem ko je R skozi *clustering* te skupine izbral bolj pametno.
 
-```{r bar, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center'}
+***
+
+# Migracija in religije
+
+```{r bar, plotly = TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 grafDrreg
 ```
+
+V zgornjem grafu (če se z miško sprehodimo čez stolpce, lahko vidimo državo) so predstavljeni podatki o deležih imigracije in emigracije po 
+posameznih državah glede na velikost prebivalstva, urejenih po dominantni religiji v državi. 
+O točnosti podatkov seveda ne moremo govoriti (morda je skoraj 200% priselitev ljudi v Papuo Novo Gvinejo malce pretirano), a vseeno lahko 
+opazimo nekatere zanimivosti: 
+
+* Čeprav je držav v posamezni kategoriji zelo različno, so znotraj skupin povsod približno enako urejene (nekaj visokih stolpcev, ki eksponentno
+  padajo).
+* Največji delež imigranotv so dosegle države, ki so večinoma muslimanske. Ob natančnejšem pregledu dejanskih držav, bi lahko sklepali, da so te 
+  države postale muslimanske prav zaradi priseljevanja muslimanov, saj se drugače ne zdijo pretirano muslimanske (to so nekatere države v južni 
+  Ameriki).
+* Vse verske skupine so imele več imigracije kot emigracije, kar je verjetno posledica napake v podatkih.
+
 
 ***
 
@@ -134,3 +146,5 @@ shinyAppDir("shiny", options=list(width="100%", height=600))
 Iz zgornjega interaktivnega grafa lahko opazimo močno korelacijo med imigracijo oz. emigracijo in BDP-jem 
 države. Ob natančnem pregledu in primerjavo z BDP per capita in populacijo opazimo, da je ta povezava 
 posledica naraščanja populacije in ne zares efektivnega BDP.
+
+***

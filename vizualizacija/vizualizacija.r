@@ -86,11 +86,19 @@ dominantna <- distinct(religigranti, country, .keep_all = TRUE) %>%
 
 grafDominantna <- ggplot(dominantna %>% select(-"procent", -"populacija") %>%
                  gather(preseljevanje, delez, 3:4), aes(x = delez, fill = preseljevanje)) + 
-  geom_histogram() + facet_grid(religija~.)
+  geom_histogram() + facet_grid(Religija~.)
  
-grafDrreg <- ggplot(dominantna %>% arrange(religija, desc(emigracija)) %>% 
-                      mutate(country = 1:174), aes(x = country, y = emigracija, fill = religija) ) + geom_col()
+država <- dominantna$country
 
+grafDrreg <- ggplot(dominantna %>% arrange(Religija, desc(emigracija)) %>% 
+                      mutate(country = 1:174), aes(x = country, y = - emigracija, fill = Religija, država = država)) + 
+  geom_col() + geom_col(data = dominantna %>% arrange(Religija, desc(imigracija)) %>% 
+                          mutate(country = 1:174), aes(x = country, y = imigracija, fill = Religija)) + 
+  geom_hline(yintercept = 0) + ylab("Delež emigracije / Delež imigracije") + xlab("Država") + 
+  ggtitle("Delež imigrantov/emigrantov glede na religijo (2019)") + theme(axis.text.x = element_blank(),
+                                                                   axis.ticks.x = element_blank())
+
+grafDrreg <- ggplotly(grafDrreg, tooltip = "država", width = 1000, height = 600)
 
 # muslimani <- ggplot(religigranti, 
 #                     aes(x = muslims, y = emigracija)) + 
