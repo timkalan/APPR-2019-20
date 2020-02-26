@@ -35,7 +35,7 @@ ui <- fluidPage(
                              label = "5. Časovno obdobje",
                              choices = c("Skupaj" = "sku",
                                          2019, 2015, 2010, 2005, 2000, 1995, 1990),
-                             selected = "sku"),
+                             selected = "sku")
                  ),
     mainPanel(plotOutput("grafk", height = "550px"), 
               tableOutput("tabelca"))
