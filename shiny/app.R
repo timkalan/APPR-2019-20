@@ -17,13 +17,11 @@ ui <- fluidPage(
                               label = "2. Vstop ali izstop",
                               choices = c("imigracija", "emigracija")),
                  br(),
-                 selectInput(inputId = "reg",
-                              label = "3. Prileganje podatkom", 
-                             choices = c("Brez regresije" = "br", 
-                                         "Linearna regresija" = "lm", 
-                                         "LOESS" = "loess", 
-                                         "GAM" = "gam"), 
-                             selected = "br"),
+                 selectInput(inputId = "cajt",
+                             label = "5. Časovno obdobje",
+                             choices = c("Skupaj" = "sku",
+                                         2019, 2015, 2010, 2005, 2000, 1995, 1990),
+                             selected = "sku"),
                  br(),
                  checkboxGroupInput(inputId = "skala",
                                     label = "4. Skala za podatke",
@@ -31,13 +29,16 @@ ui <- fluidPage(
                                                 "y logaritmiran" = "y"), 
                                     selected = c("x", "y")),
                  br(),
-                 selectInput(inputId = "cajt",
-                             label = "5. Časovno obdobje",
-                             choices = c("Skupaj" = "sku",
-                                         2019, 2015, 2010, 2005, 2000, 1995, 1990),
-                             selected = "sku")
+
+                 selectInput(inputId = "reg",
+                             label = "3. Prileganje podatkom", 
+                             choices = c("Brez regresije" = "br", 
+                                         "Linearna regresija" = "lm", 
+                                         "LOESS" = "loess", 
+                                         "GAM" = "gam"), 
+                             selected = "br")
                  ),
-    mainPanel(plotOutput("grafk", height = "550px"), 
+    mainPanel(plotOutput("grafk", height = "560px", width = "102%"), 
               tableOutput("tabelca"))
   )
 )
