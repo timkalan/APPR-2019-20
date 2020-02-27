@@ -9,7 +9,7 @@ delezi <- stock %>%
   mutate(delez = number / populacija) %>%
   select(-"leto", -"number", -"populacija")
 
-zemStock <- tm_shape(merge(svet, delezi, 
+zemljevidStock <- tm_shape(merge(svet, delezi, 
                                  by.x = "NAME", by.y = "country")) + 
   tm_polygons("delez", midpoint = 0.4)
 
@@ -20,13 +20,13 @@ starostneSkupine <- stock %>%
   filter(age != "total") %>%
   group_by(year, age, gender) %>%
   summarise(number = sum(number, na.rm = TRUE))
-starostGraf <- ggplot(starostneSkupine, aes(x = year, y = number)) + #eh
+grafStarostleta <- ggplot(starostneSkupine, aes(x = year, y = number)) + #eh
   geom_line() + facet_grid(age~gender)
 
-dve <- ggplot(starostneSkupine, aes(x = age, y = number)) + 
+grafStarostskupine <- ggplot(starostneSkupine, aes(x = age, y = number)) + 
   geom_point() + facet_grid(year~gender)
 
-starostLeta <- ggplot(starostneSkupine %>% 
+grafStarostskatla <- ggplot(starostneSkupine %>% 
                         group_by(year, age) %>%
                         summarise(number = sum(number, na.rm = TRUE)), 
                       aes(x = age, y = number)) + 
@@ -90,7 +90,7 @@ grafDominantna <- ggplot(dominantna %>% select(-"procent", -"populacija") %>%
  
 država <- dominantna$country
 
-grafDrreg <- ggplot(dominantna %>% arrange(Religija, desc(emigracija)) %>% 
+grafDrzavarelig <- ggplot(dominantna %>% arrange(Religija, desc(emigracija)) %>% 
                       mutate(country = 1:174), aes(x = country, y = - emigracija, fill = Religija, država = država)) + 
   geom_col() + geom_col(data = dominantna %>% arrange(Religija, desc(imigracija)) %>% 
                           mutate(country = 1:174), aes(x = country, y = imigracija, fill = Religija)) + 
@@ -98,11 +98,5 @@ grafDrreg <- ggplot(dominantna %>% arrange(Religija, desc(emigracija)) %>%
   ggtitle("Delež imigrantov/emigrantov glede na religijo (2019)") + theme(axis.text.x = element_blank(),
                                                                    axis.ticks.x = element_blank())
 
-grafDrreg <- ggplotly(grafDrreg, tooltip = "država", width = 1000, height = 600)
-
-# muslimani <- ggplot(religigranti, 
-#                     aes(x = muslims, y = emigracija)) + 
-#   geom_point() + scale_x_log10() + scale_y_log10()
-# #   geom_smooth(method = "gam")
-# # cor(religigranti$muslims, y = religigranti$emigracija, use = "na.or.complete")
+grafDrzavarelig <- ggplotly(grafDrreg, tooltip = "država", width = 1000, height = 600)
 

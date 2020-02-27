@@ -95,7 +95,7 @@ Graf prikazuje količino vseh svetovnih migrantov v opazovanem obdobju, razdelje
 škatla pa dodatno pove, kako se je to število spreminjalo skozi leta.
 
 ```{r graf, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
-starostLeta
+grafStarostskatla
 ```
 
 Opazimo, da je največ priseljencev starih med 30 in 40 let, hkrati pa se je njihova količina tudi najbolj
@@ -106,11 +106,11 @@ V nadaljevanju smo si ogledali, kakšen delež populacije posamezne države pred
 države še razdelili v skupine in opazili vsaj delno ujemanje. Prikazano je na spodnjih zemljevidih.
 
 ```{r zemljevid, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center', fig.cap='Zemljevid deleža priseljencev'}
-zemStock
+zemljevidStock
 ```
 
 ```{r cluster, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center', fig.cap='Države po skupinah'}
-zemCluster
+zemljevidCluster
 ```
 
 Ker je veliko držav z relativno majhnim deležem priseljencev, so bile na prvem zemljevidu dane v isto 
@@ -126,7 +126,7 @@ v najbokjše kategorije z najmanjšim odstopanjem od povprečja znotraj skupin.
 # Migracija in religije
 
 ```{r bar, plotly = TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-grafDrreg
+grafDrzavarelig
 ```
 
 V zgornjem grafu (če se z miško sprehodimo čez stolpce, lahko vidimo državo) so predstavljeni podatki o deležih imigracije in emigracije po 
@@ -145,7 +145,7 @@ opazimo nekatere zanimivosti:
 ***
 
 ```{r shiny, echo=FALSE}
-shinyAppDir("shiny", options=list(width="100%", height=700))
+shinyAppDir("shiny", options=list(width="105%", height=730))
 ```
 
 Iz zgornjega interaktivnega grafa sprva opazimo močno korelacijo med imigracijo oz. emigracijo in BDP-jem 
