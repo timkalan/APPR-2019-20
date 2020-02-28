@@ -98,5 +98,5 @@ grafDrzavarelig <- ggplot(dominantna %>% arrange(Religija, desc(emigracija)) %>%
   ggtitle("Delež imigrantov/emigrantov glede na religijo (2019)") + theme(axis.text.x = element_blank(),
                                                                    axis.ticks.x = element_blank())
 
-grafDrzavarelig <- ggplotly(grafDrreg, tooltip = "država", width = 1000, height = 600)
+grafDrzavarelig <- ggplotly(grafDrzavarelig, tooltip = "država", width = 1000, height = 600)
 
