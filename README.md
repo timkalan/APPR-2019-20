@@ -43,7 +43,7 @@ se shranijo v mapo `../zemljevidi/` (torej izven mape projekta).
 
 ## Potrebni paketi za R
 
-Za zagon tega vzorca je potrebno namestiti sledeče pakete za R:
+Za zagon tega projekta je potrebno namestiti sledeče pakete za R:
 
 * `knitr` - za izdelovanje poročila
 * `rmarkdown` - za prevajanje poročila v obliki RMarkdown
@@ -61,6 +61,10 @@ Za zagon tega vzorca je potrebno namestiti sledeče pakete za R:
 * `mosaic` - za pretvorbo zemljevidov v obliko za risanje z `ggplot2`
 * `maptools` - za delo z zemljevidi
 * `extrafont` - za pravilen prikaz šumnikov (neobvezno)
+* `tmap` - za risanje zemljevidov
+* `StandardizeText` - za poenotenje imen držav
+* `readxl` - za branje excel datotek
+* `plotly` - za dodatno funkcionalnost grafov
 
 ## Binder
 
