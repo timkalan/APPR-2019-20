@@ -163,4 +163,23 @@ kakšni korelaciji.
 
 # Napovedovanje migracije v prihodnosti 
 
+Namen razdelka je preveriti, kako dobro lahko s čim bolj preprostim modelom napovemo migracijo v prihodnosti, 
+hkrati pa bomo preverili, kako napove podatke za 2019 in to primerjali z dejanskimi vrednostmi.
+Na spodnjem grafu je prikazano povprečno priseljevanje in odseljevanje (za cel svet), hkrati pa še linearni model
+in model pridobljen z metodo LOESS.
+
+```{r napoved, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center'}
+grafMigracija
+```
+
+Prva zanimivost, ki jo opazimo je, da je bilo v celotnem obdobju več priseljevanja kot odseljevanja, kar je po vsej
+verjetosti posledica bolj natančnega beleženja priseljencev, kot odseljencev; seveda pa je možno tudi, da je le 
+napaka v podatkih. Zanimivo je tudi, da je imigracija hitreje rastla kot imigracija, kar spet lahko pripišemo večji 
+natančnosti popisa prišlekov.    
+Linearni model je za leto 2019 napovedal v povprečju 2856819 imigrantov in 1329284,6 emigrantov, to se pa od dejanskih
+številk razlikuje za 101437,9 in 46265, kar pomeni relativni napaki **3,6%** in **3,5%**. Torej linearni model dobro napove 
+povprečje.    
+Z modelom LOESS pa sta bili relativni napaki **0,17%** in **0,07%**. Ni presenetljivo, da je kompleksnejši model dal občutno
+boljše rezultate.
+
 ***

@@ -16,26 +16,36 @@ korelacija <- cor(master$BDP, y = master$imigracija, use = "na.or.complete")
 
 
 # NAPOVEDOVANJE MIGRCIJE ####
-grafMigracija <- ggplot(master %>% group_by(leto) %>%
-                           summarise(povp = mean(imigracija, na.rm = TRUE)), 
-                         aes(x = leto, y = povp)) + 
-  geom_point() + geom_point(data = master %>% group_by(leto) %>%
-                              summarise(povp = mean(emigracija, na.rm = TRUE)), 
-                            aes(x = leto, y = povp), col = "red") 
+grafMigracija <- ggplot(master %>% gather(preselitev, stevilo, 8:9) %>%
+                                            group_by(leto, preselitev) %>% 
+                                            summarise(stevilo = mean(stevilo)),
+                         aes(x = leto, y = stevilo)) + geom_point() +
+  facet_grid(~preselitev) + xlim(1990, 2025) + 
+  geom_smooth(method = "lm", se = FALSE, fullrange = TRUE) + 
+  xlab("Leto") + ylab("Število") + 
+  ggtitle("Povprečna emigracija in imigracija v obdobju 1990-2019") + 
+  geom_smooth(method = "loess", se = FALSE, fullrange = TRUE, col = "yellow")
+
 
 cor(imigracija$Year, y = imigracija$number, use = "na.or.complete")
 
 linImigracija <- lm(data = master, imigracija ~ leto)
 napoved <- data.frame(leto = seq(1990, 2025, 1))
-napoved$imigracija <- predict(lin, napoved) # kaj model napove
-
-grafMigracija <- grafMigracija + xlim(1990, 2025) + 
-  geom_smooth(method = "lm", se = FALSE, fullrange = TRUE, col = "pink") 
+napoved$imigracija <- predict(linImigracija, napoved) # kaj model napove
 
 linEmigracija <- lm(data = master, emigracija ~ leto)
 napoved$emigracija <- predict(linEmigracija, napoved)
+# loh bi še kej o vsaki državi posebi. 
 
-# to dej v en kjut facetek ane
+loessImigracija <- loess(data = master, imigracija ~ leto)
+napoved$lImi <- predict(loessImigracija, napoved)
+
+loessEmigracija <- loess(data = master, emigracija ~ leto)
+napoved$lEmi <- predict(loessEmigracija, napoved)
+
+
+# napake <- sapply(list(linImigracija, kv, mls, mgam), function(x) sum(x$residuals^2))
 
 
 # RAZVRŠČANJE DRŽAV V SKUPINE ####
+
