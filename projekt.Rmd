@@ -109,17 +109,20 @@ države še razdelili v skupine in opazili vsaj delno ujemanje. Prikazano je na 
 zemljevidStock
 ```
 
+Opazimo, da je zaradi avtomatičnega deljenja na enako dolge intervale zelo veliko držav vključenih v enako
+skupino. Zato visoki deleži res izstopajo; z ostrim pogledom lahko opazimo Združene Arabske Emirate kot najbolj
+saturirane s tujci (delež imigrantov, ki živijo tam je med 80% in 100%). Vseeno želimo bolj natančen pregled sveta, 
+ki ga dobimo spodaj: 
+
 ```{r cluster, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center'}
 zemljevidCluster
 ```
 
-Ker je veliko držav z relativno majhnim deležem priseljencev, so bile na prvem zemljevidu dane v isto 
-kategorijo, zato je graf relativno nepreglden in nezanimiv. Vseeno lahko vidimo, da je država z največjim
-deležem priseljencev Združeni Arabski Emirati, ki ima res izjemno velik delež priseljencev, nekje med 80%
-in 100%. Ostale države so glede priseljencev bolj umirjene.      
-Ker pa smo hoteli bolj pregleden graf, pa smo izvedli še *clustering*, in tako poskušali države razdeliti v 
+Ker pa smo hoteli bolj pregleden graf, pa smo izvedli (k-means) *clustering*, in tako poskušali države razdeliti v 
 kar se da smiselne skupine, ki se vseeno ujemajo s prvim zemljevidom. S to metodo smo tako države razdelili 
-v najbokjše kategorije z najmanjšim odstopanjem od povprečja znotraj skupin. 
+v najboljše kategorije z najmanjšim odstopanjem od povprečja znotraj skupin. Na zgornjem zemljevidu so po 
+teh skupinah razporejene države, skupina 1 pomeni najmanjši delež, skupina 5 pa največji.     
+Takoj je opazna nepopularnost Južne Amerike, Afrike in Azije, držav z večjim deležem pa je bolj malo.
 
 ***
 
@@ -134,12 +137,13 @@ posameznih državah glede na velikost prebivalstva, urejenih po dominantni relig
 O točnosti podatkov seveda ne moremo govoriti (morda je skoraj 200% priselitev ljudi v Papuo Novo Gvinejo malce pretirano), a vseeno lahko 
 opazimo nekatere zanimivosti: 
 
-* Čeprav je držav v posamezni kategoriji zelo različno, so znotraj skupin povsod približno enako urejene (nekaj visokih stolpcev, ki eksponentno
-  padajo).
+* Čeprav je držav v posamezni kategoriji zelo različno, so znotraj skupin povsod približno enako urejene (nekaj visokih stolpcev, ki
+  eksponentno padajo).
 * Največji delež imigranotv so dosegle države, ki so večinoma muslimanske. Ob natančnejšem pregledu dejanskih držav, bi lahko sklepali, da so te 
   države postale muslimanske prav zaradi priseljevanja muslimanov, saj se drugače ne zdijo pretirano muslimanske (to so nekatere države v južni 
   Ameriki).
-* Vse verske skupine so imele več imigracije kot emigracije, kar je verjetno posledica napake v podatkih.
+* Vse verske skupine so imele več imigracije kot emigracije, kar je verjetno posledica napake v podatkih, oziroma natančnejšega popisa
+  imigrantov.
 
 
 ***
@@ -154,7 +158,7 @@ ugotovimo, da je zelo verjetno korelacija posledica naraščajoče populacije in
 BDP-jem države. 
 
 Zanimivo je tudi, da med preseljevanjem ljudi in stopnjo izobraženosti oziroma indeksom človekovega razvoja ni 
-zares nobene močne povezave, med temi spremenljivkami je največji korelacijski koeficient 0,25, kar je zelo malo
+zares nobene močne povezave, med temi spremenljivkami je največji korelacijski koeficient **0,25**, kar je zelo malo
 v primerjavi z nekaterimi drugimi povezavami. Pri natančnem pregledu grafa morda lahko opazimo, da je pri nekaterih
 državah z visokimi indeksi občuten poskok v imigraciji, a je teh primerov tako malo, da bi lahko zares govorili o 
 kakšni korelaciji.
@@ -166,7 +170,7 @@ kakšni korelaciji.
 Namen razdelka je preveriti, kako dobro lahko s čim bolj preprostim modelom napovemo migracijo v prihodnosti, 
 hkrati pa bomo preverili, kako napove podatke za 2019 in to primerjali z dejanskimi vrednostmi.
 Na spodnjem grafu je prikazano povprečno priseljevanje in odseljevanje (za cel svet), hkrati pa še linearni model
-in model pridobljen z metodo LOESS.
+in model pridobljen z metodo **LOESS**.
 
 ```{r napoved, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center'}
 grafMigracija
@@ -183,5 +187,29 @@ Z modelom LOESS pa sta bili relativni napaki **0,17%** in **0,07%**. Ni presenet
 boljše rezultate.    
 Za prihodnost seveda obe metodi napovedujeta porast imigracije in emigracije. To je zaradi večje povezanosti sveta seveda 
 pričakovano. 
+
+***
+
+# Razvrščanje držav v skupine
+
+Ker je napovedovanje za vsako državo posebej težko efektivno vizualizirati, smo se raje ukvarjali z razvrščanjem le teh
+v skupine glede na število imigrantov oziroma emigrantov. 
+
+```{r emi, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center'}
+zemljevidEmi
+```
+
+Kljub k-means clusteringu, je skupina z najmanjšo emigracijo daleč največja, a verjetno imajo države za ne-emigriranje
+drugačne motive. V revnejših delih sveta to verjetno sploh ni mogoče, v državah kot so ZDA pa je kultura taka, da je večina
+migracij znotraj meja.
+
+```{r imi, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center'}
+zemljevidImi
+```
+
+***
+
+# Še nekaj malega o Sloveniji
+
 
 ***
