@@ -1,9 +1,13 @@
 # ZEMLJEVID - CLUSTERING ####
 skupineDelez <- kmeans(delezi$delez, 5, nstart = 1500)
-zemljevidCluster <- tm_shape(merge(svet, data.frame(country = delezi$country, skupina = factor(skupineDelez$cluster)), 
+zemljevidCluster <- tm_shape(merge(svet, data.frame(country = delezi$country, 
+                                                    skupina = factor(skupineDelez$cluster)), 
                              by.x = "NAME", by.y = "country")) + 
   tmap_options(max.categories = 5) + 
-  tm_polygons("skupina")
+  tm_polygons("skupina", title = "Skupina") +
+  tm_layout(main.title = "Države razdeljene v skupine glede na delež priseljencev") + 
+  tm_legend(position = c("left", "center"))
+zemljevidCluster
 
 napakaClust <- skupineDelez$tot.withinss
 

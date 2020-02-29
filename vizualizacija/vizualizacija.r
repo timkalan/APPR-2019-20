@@ -11,8 +11,10 @@ delezi <- stock %>%
 
 zemljevidStock <- tm_shape(merge(svet, delezi, 
                                  by.x = "NAME", by.y = "country")) + 
-  tm_polygons("delez", midpoint = 0.4)
-
+  tm_polygons("delez", midpoint = 0.4, title = "Delež") + 
+  tm_layout(main.title = "Delež priseljencev glede na populacijo države") + 
+  tm_legend(position = c("left", "center"))
+zemljevidStock
 
 
 # GRAF - starostne skupine ####
