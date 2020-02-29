@@ -62,9 +62,12 @@ napoved$lEmi <- predict(loessEmigracija, napoved)
 povprecje <- master %>% group_by(country) %>% 
   summarise(emigracija = mean(emigracija, na.rm = TRUE),
             imigracija = mean(imigracija, na.rm = TRUE), 
-            populacija = mean(populacija, na.rm = TRUE)) %>%
-  mutate(emigracija = emigracija / populacija, imigracija = imigracija / populacija) %>%
-  select(-"populacija")
+            populacija = mean(populacija, na.rm = TRUE), 
+            BDP = mean(BDP, na.rm = TRUE), 
+            BDPpc = mean(BDPpc, na.rm = TRUE), 
+            izobrazenost = mean(izobrazenost, na.rm = TRUE), 
+            HDI = mean(HDI, na.rm = TRUE)) %>%
+  mutate(emigracija = emigracija / populacija, imigracija = imigracija / populacija) 
 
 skupineEmigracija <- kmeans(povprecje$emigracija, 6, nstart = 1500)
 centersEmi <- sort(skupineEmigracija$centers)
@@ -91,3 +94,8 @@ zemljevidImi <- tm_shape(merge(svet, data.frame(country = povprecje$country,
   tm_layout(main.title = "Države razdeljene glede na povprečno imigracijo") + 
   tm_legend(position = c("left", "center"))
 
+povprecje <- povprecje %>% inner_join(data.frame(country = povprecje$country, 
+                                                 skupinaE = factor(skupineEmigracija$cluster))) %>%
+  inner_join(data.frame(country = povprecje$country, 
+                        skupinaI = factor(skupineImigracija$cluster)))
+povprecje <- data.frame(povprecje)
