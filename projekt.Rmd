@@ -105,11 +105,11 @@ nenavadno več od malce mlajših, ker je v njihopvo skupino zajeto več možnih 
 V nadaljevanju smo si ogledali, kakšen delež populacije posamezne države predstavljajo migranti, nato pa smo 
 države še razdelili v skupine in opazili vsaj delno ujemanje. Prikazano je na spodnjih zemljevidih.
 
-```{r zemljevid, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center', fig.cap='Zemljevid deleža priseljencev'}
+```{r zemljevid, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center'}
 zemljevidStock
 ```
 
-```{r cluster, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center', fig.cap='Države po skupinah'}
+```{r cluster, echo=FALSE, warning=FALSE, message=FALSE, results='hide', fig.align='center'}
 zemljevidCluster
 ```
 
@@ -180,6 +180,8 @@ Linearni model je za leto 2019 napovedal v povprečju 2856819 imigrantov in 1329
 številk razlikuje za 101437,9 in 46265, kar pomeni relativni napaki **3,6%** in **3,5%**. Torej linearni model dobro napove 
 povprečje.    
 Z modelom LOESS pa sta bili relativni napaki **0,17%** in **0,07%**. Ni presenetljivo, da je kompleksnejši model dal občutno
-boljše rezultate.
+boljše rezultate.    
+Za prihodnost seveda obe metodi napovedujeta porast imigracije in emigracije. To je zaradi večje povezanosti sveta seveda 
+pričakovano. 
 
 ***
