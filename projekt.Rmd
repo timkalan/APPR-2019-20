@@ -45,20 +45,20 @@ v obliki CSV iz raznih spletnih strani, ki so natančno navedene v "README.md",
 poleg tega pa še podatke o BDP-ju držav skozi čas v obliki HTML iz Wikipedije. Podatke imamo v štirih razpredelnicah v 
 obliki *tidy data*. 
   
-1. `migranti` - podatki o migraciji ljudi
+1. **`migranti`** - podatki o migraciji ljudi
   - `origin` - spremenljivka: ime države, iz katere so se ljudje izseljevali (besedilo),
   - `destination` - spremenljivka: ime države, v katero so se ljudje vseljevali (besedilo),
   - `year` - spremenljivka: leto, v katerem je bila izmerjena migracija (število: med 1990 in 2019, petletni intervali),
   - `number` - meritev: število ljudi, ki se je preselilo iz origin v destination v določenem letu (število).
 
-2. `stock` - podatki o številu migrantov v posamezni državi
+2. **`stock`** - podatki o številu migrantov v posamezni državi
   - `country` - spremenljivka: ime države (besedilo),
   - `year` - spremenljivka: leto, na kateregea se podatek navezuje (število: med 1990 in 2019, ustrezno leto),
   - `age` - spremenljivka: starostna skupina (besedilo: petletne skupine),
   - `gender` - spremenljivka: spol imigranta (besedilo: male ali female),
   - `number` - meritev: število imigrantov (število).
 
-3. `drzave` - podatki o skoraj vseh svetovnih državah
+3. **`drzave`** - podatki o skoraj vseh svetovnih državah
   - `drzava` - spremenljivka: ime države (besedilo),
   - `leto` - spremenljivka: leto, na kateregea se podatek navezuje (število: med 1990 in 2019, ustrezno leto),
   - `BDP` - meritev: bruto domači proizvod, prilagojen na cene (število: med 0 in 28000000000 v dolarjih),
@@ -66,7 +66,7 @@ obliki *tidy data*.
   - `izobrazba` - meritev: indeks izobraženosti za posamezne države (število: med 0 in 1), 
   - `hdi` - meritev: indeks človekove razvitosti za posamezne države (število: med 0 in 1).
   
-4. `religije` - podatki o verski strukturi posameznih držav
+4. **`religije`** - podatki o verski strukturi posameznih držav
   - `country` - spremenljivka: ime države (besedilo),
   - `christians` - meritev: število kristjanov v državi (število),
   - `muslims` - meritev: število muslimanov v državi (število),
@@ -207,6 +207,9 @@ migracij znotraj meja.
 zemljevidImi
 ```
 
+Smiselno je, da so v skupinah, kamor je odpotovalo največ migratnov države, ki imajo tudi največ imigrantov glede na
+populacijo (prikazano na zemljevidu zgoraj).
+
 ***
 
 # Še nekaj malega o Sloveniji
@@ -221,7 +224,8 @@ Opazimo, da je skozi celotno obdobje bilo več moških migrantov kot ženskih, n
 je bila skozi celotno obdobje okoli 40 let.   
 V letih po osamosvojitvi je število imigrantov padlo, kar je verjetno posledica hudih političnih in 
 socialno-ekonomskih sprememb v tistem času. Prav tako je morda zanimivo, da je v času migrantske krize (leto 2015) 
-njihovo število upadlo.     
+njihovo število upadlo. To zna biti posledica preliminarnih ukrepov države, saj vidimo, da je njihovo število spet
+narastlo ob naslednji meritvi.
 V celotnem obdobju je bilo starejših imigrantov več kot tistih najmlajših, ta razlika pa se je povečevala.
 
 ```{r popular, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', plotly = TRUE}
@@ -231,4 +235,5 @@ grafSlomig
 Na zgornjem grafu lahko vidimo 15 najpopularnejših destinacij za preseljevanje Slovencev in 15 držav iz katerih
 k nam pride največ ljudi. Številke so seštevk celotnega obdobja (torej 1990-2019), z miško pa lahko ugotovimo 
 katero državo predstavlja posamezni stolpec.
+
 ***
