@@ -14,7 +14,7 @@ zemljevidStock <- tm_shape(merge(svet, delezi,
   tm_polygons("delez", midpoint = 0.4, title = "Delež") + 
   tm_layout(main.title = "Delež priseljencev glede na populacijo države") + 
   tm_legend(position = c("left", "center"))
-zemljevidStock
+
 
 
 # GRAF - starostne skupine ####
@@ -102,3 +102,13 @@ grafDrzavarelig <- ggplot(dominantna %>% arrange(Religija, desc(emigracija)) %>%
 
 grafDrzavarelig <- ggplotly(grafDrzavarelig, tooltip = "država", width = 1000, height = 600)
 
+
+
+# SLOVENIJA ####
+slovenijaEmi <- migranti %>% filter(origin == "Slovenia") %>%
+  select(-"origin")
+slovenijaImi <- migranti %>% filter(destination == "Slovenia") %>%
+  select(-"destination")
+slovenijaStovk <- stock %>% filter(country == "Slovenia") %>%
+  select(-"country")
+grafSlomig <- ggplot(slovenijaImi, aes())
