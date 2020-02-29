@@ -208,7 +208,8 @@ zemljevidImi
 ```
 
 Smiselno je, da so v skupinah, kamor je odpotovalo največ migratnov države, ki imajo tudi največ imigrantov glede na
-populacijo (prikazano na zemljevidu zgoraj).
+populacijo (prikazano na zemljevidu zgoraj). Poleg tega pa vidimo, da so podobne spet države Južne Amerike, Afrike 
+in Azije, v Evropi in Ameriki pa opazimo nekaj več imigracije.
 
 ***
 
