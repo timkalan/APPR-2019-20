@@ -43,7 +43,7 @@ ui <- fluidPage(
   )
 )
 
-# master <- master %>% filter(leto == 2010)
+
 
 server <- function(input, output) {
   x <- reactive({input$skala})
@@ -114,10 +114,9 @@ server <- function(input, output) {
     pod %>% 
       summarise("Korelacijski koeficient" = cor(pod[, input$podatek], 
                                                 y = pod[, input$emiimi], use = "na.or.complete"),
-                # "Povprečje" = mean(master[, input$podatek], na.rm = TRUE),
-                # "Mediana" = median(master[, input$podatek], na.rm = TRUE), 
-                # "Min" = min(master[, input$podatek], na.rm = TRUE), 
-                # "Max" = max(master[, input$podatek], na.rm = TRUE)
+                "Povprečje" = mean(pod[, input$emiimi], na.rm = TRUE),
+                "Minimum" = min(pod[, input$emiimi], na.rm = TRUE),
+                "Maksimum" = max(pod[, input$emiimi], na.rm = TRUE)
                 )
     })
 }
