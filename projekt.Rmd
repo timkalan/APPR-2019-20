@@ -221,6 +221,14 @@ Opazimo, da je skozi celotno obdobje bilo več moških migrantov kot ženskih, n
 je bila skozi celotno obdobje okoli 40 let.   
 V letih po osamosvojitvi je število imigrantov padlo, kar je verjetno posledica hudih političnih in 
 socialno-ekonomskih sprememb v tistem času. Prav tako je morda zanimivo, da je v času migrantske krize (leto 2015) 
-njihovo število upadlo. 
+njihovo število upadlo.     
+V celotnem obdobju je bilo starejših imigrantov več kot tistih najmlajših, ta razlika pa se je povečevala.
 
+```{r popular, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', plotly = TRUE}
+grafSlomig
+```
+ 
+Na zgornjem grafu lahko vidimo 15 najpopularnejših destinacij za preseljevanje Slovencev in 15 držav iz katerih
+k nam pride največ ljudi. Številke so seštevk celotnega obdobja (torej 1990-2019), z miško pa lahko ugotovimo 
+katero državo predstavlja posamezni stolpec.
 ***

@@ -8,7 +8,7 @@ zemljevidCluster <- tm_shape(merge(svet, data.frame(country = delezi$country,
                              by.x = "NAME", by.y = "country")) + 
   tmap_options(max.categories = 5) + 
   tm_polygons("skupina", title = "Skupina") +
-  tm_layout(main.title = "Države razdeljene v skupine glede na delež priseljencev") + 
+  tm_layout(main.title = "Države razdeljene glede na delež priseljencev") + 
   tm_legend(position = c("left", "center"))
 
 napakaClust1 <- skupineDelez$tot.withinss
@@ -75,7 +75,7 @@ zemljevidEmi <- tm_shape(merge(svet, data.frame(country = povprecje$country,
                                    by.x = "NAME", by.y = "country")) + 
   tmap_options(max.categories = 6) + 
   tm_polygons("skupina", title = "Skupina") + 
-  tm_layout(main.title = "Države razdeljene v skupine glede na povprečno emigracijo") + 
+  tm_layout(main.title = "Države razdeljene glede na povprečno emigracijo") + 
   tm_legend(position = c("left", "center"))
 
 
@@ -88,6 +88,6 @@ zemljevidImi <- tm_shape(merge(svet, data.frame(country = povprecje$country,
                                by.x = "NAME", by.y = "country")) + 
   tmap_options(max.categories = 6) + 
   tm_polygons("skupina", title = "Skupina") + 
-  tm_layout(main.title = "Države razdeljene v skupine glede na povprečno imigracijo") + 
+  tm_layout(main.title = "Države razdeljene glede na povprečno imigracijo") + 
   tm_legend(position = c("left", "center"))
 

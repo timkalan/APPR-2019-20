@@ -117,11 +117,34 @@ slovenijaStock <- stock %>% filter(country == "Slovenia") %>%
 slovenijaPodatki <- master %>% filter(country == "Slovenia") %>%
   select(-"country")
 
-grafSlodrzave <- ggplot(slovenijaImi %>% group_by(origin) %>%
-                          summarise(number = sum(number, na.rm = TRUE)) %>%
-                          arrange(desc(number)), 
-                        aes(x = origin, y = number)) + 
-  geom_col()
+popularImi <- slovenijaImi %>% filter(origin != "Total") %>%
+  group_by(origin) %>%
+  summarise(number = sum(number, na.rm = TRUE)) %>%
+  arrange(desc(number))
+popularImi <- popularImi[1:15,]
+poreklo <- popularImi$origin
+
+popularEmi <- slovenijaEmi %>% filter(destination != "Total") %>%
+  group_by(destination) %>%
+  summarise(number = sum(number, na.rm = TRUE)) %>%
+  arrange(desc(number))
+popularEmi <- popularEmi[1:15,]
+cilj <- popularEmi$destination
+
+grafSloimig <- ggplot(popularImi %>% mutate(origin = 1:15), 
+                     aes(x = origin, y = number, poreklo = poreklo)) + 
+  geom_col() + xlab("Poreklo") + ylab("Število") + 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+grafSloimig <- ggplotly(grafSloimig, tooltip = "poreklo", width = 850)
+
+grafSloemig <- ggplot(popularEmi %>% mutate(destination = 1:15), 
+                      aes(x = destination, y = number, cilj = cilj)) + 
+  geom_col() + xlab("Cilj") + ylab("Število") + 
+  ggtitle("Kdo v Slovenijo pride in kam Slovenec gre") + 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+grafSloemig <- ggplotly(grafSloemig, tooltip = "cilj", width = 850)
+
+grafSlomig <- subplot(grafSloimig, grafSloemig, titleX = TRUE, titleY = TRUE, margin = 0.08) 
 
 grafSlostock <- ggplot(slovenijaStock %>% filter(age != "total") %>%
                          rename(Starost = age), 
@@ -132,3 +155,4 @@ grafSlostock <- ggplot(slovenijaStock %>% filter(age != "total") %>%
             aes(x = year, y = number)) + 
   facet_grid(~gender) + xlab("Leto") + ylab("Število") + 
   ggtitle("Število imigrantov glede na spol in starost v obdobju 1990-2019")
+
