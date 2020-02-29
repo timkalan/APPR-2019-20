@@ -9,9 +9,8 @@ Repozitorij z gradivi pri predmetu APPR v študijskem letu 2019/20
 
 #### Osnovna ideja
 Analiziral bom migracijo po svetu (oziroma čim večih državah). Zajeta bosta tako imigracija kot emigracija. Primerjal bom podatke po starosti, izobrazbi, spolu, religiji. Države od kjer ljudje prihajajo in kamor grejo pa bom analiziral glede na kazalnike razvoja, kot 
-je npr. BDP, pa tudi glede na stvari kot so izbruhi bolezni, zdravje, teroristični napadi. Poskušal bom odkriti tudi časovne trende, 
-saj so na voljo podatki iz zadnjih nekaj deset let. S pomočjo tega bom lahko države postavil na lestvico, glede na neto imigracijo in 
-to primerjal s "srečo" (oz. nekim indikatorjem razvoja/veselja/zadovoljstva) ljudi. 
+je npr. BDP. Poskušal bom odkriti tudi časovne trende, 
+saj so na voljo podatki iz zadnjih nekaj deset let. Države bom primerjal med sabo in iskal povezave med njimi ter jih s tem razvrstil v skupine.  
 
 
 #### Viri
