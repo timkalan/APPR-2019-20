@@ -211,5 +211,16 @@ zemljevidImi
 
 # Še nekaj malega o Sloveniji
 
+Za konec si poglejmo še stanje migracije v Sloveniji.
+
+```{r sloStock, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center'}
+grafSlostock
+```
+
+Opazimo, da je skozi celotno obdobje bilo več moških migrantov kot ženskih, najbolj popularna starost imigranta pa
+je bila skozi celotno obdobje okoli 40 let.   
+V letih po osamosvojitvi je število imigrantov padlo, kar je verjetno posledica hudih političnih in 
+socialno-ekonomskih sprememb v tistem času. Prav tako je morda zanimivo, da je v času migrantske krize (leto 2015) 
+njihovo število upadlo. 
 
 ***

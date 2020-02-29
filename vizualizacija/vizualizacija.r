@@ -1,3 +1,6 @@
+# tu je več grafov, kot jih je na koncu vključeno v poročilo,
+# a sem želel prikazati tudi fazo "eksploratorne analize"
+
 # ZEMLJEVID - delež ####
 delezi <- stock %>%  
   filter(age == "total", year == "2019") %>%
@@ -109,6 +112,23 @@ slovenijaEmi <- migranti %>% filter(origin == "Slovenia") %>%
   select(-"origin")
 slovenijaImi <- migranti %>% filter(destination == "Slovenia") %>%
   select(-"destination")
-slovenijaStovk <- stock %>% filter(country == "Slovenia") %>%
+slovenijaStock <- stock %>% filter(country == "Slovenia") %>%
   select(-"country")
-grafSlomig <- ggplot(slovenijaImi, aes())
+slovenijaPodatki <- master %>% filter(country == "Slovenia") %>%
+  select(-"country")
+
+grafSlodrzave <- ggplot(slovenijaImi %>% group_by(origin) %>%
+                          summarise(number = sum(number, na.rm = TRUE)) %>%
+                          arrange(desc(number)), 
+                        aes(x = origin, y = number)) + 
+  geom_col()
+
+grafSlostock <- ggplot(slovenijaStock %>% filter(age != "total") %>%
+                         rename(Starost = age), 
+                       aes(x = year, y = number)) + 
+  geom_col(position = "dodge", aes(fill = Starost)) +
+  geom_line(data = slovenijaStock %>% filter(age != "total") %>%
+              group_by(year, gender) %>% summarise(number = mean(number)),
+            aes(x = year, y = number)) + 
+  facet_grid(~gender) + xlab("Leto") + ylab("Število") + 
+  ggtitle("Število imigrantov glede na spol in starost v obdobju 1990-2019")
