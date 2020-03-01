@@ -34,14 +34,14 @@ grafStarostskupine <- ggplot(starostneSkupine, aes(x = age, y = number)) +
 grafStarostskatla <- ggplot(starostneSkupine %>% 
                         group_by(year, age) %>%
                         summarise(number = sum(number, na.rm = TRUE)), 
-                      aes(x = age, y = number)) + 
+                      aes(x = age, y = number / 1000)) + 
   geom_boxplot() +
   geom_line(data = starostneSkupine %>% group_by(age, year) %>%
                                summarise(povp = sum(number, na.rm = TRUE)) %>%
                group_by(age) %>% summarise(med = median(povp)),
-                             aes(x = age, y = med, group = 1, color = "red"), 
+                             aes(x = age, y = med / 1000, group = 1, color = "red"), 
             show.legend = FALSE) + 
-  xlab("Starost (leta)") + ylab("Število migrantov") + 
+  xlab("Starost (leta)") + ylab("Število migrantov (v tisočih)") + 
   ggtitle("Število migrantov glede na starost v obdobju 1990-2019")
 
 
@@ -132,19 +132,19 @@ popularEmi <- popularEmi[1:15,]
 cilj <- popularEmi$destination
 
 grafSloimig <- ggplot(popularImi %>% mutate(origin = 1:15), 
-                     aes(x = origin, y = number, poreklo = poreklo)) + 
-  geom_col() + xlab("Poreklo") + ylab("Število") + 
+                     aes(x = origin, y = number / 1000, poreklo = poreklo)) + 
+  geom_col() + xlab("Poreklo") + ylab("Število (v tisočih)") + 
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 grafSloimig <- ggplotly(grafSloimig, tooltip = "poreklo", width = 850)
 
 grafSloemig <- ggplot(popularEmi %>% mutate(destination = 1:15), 
-                      aes(x = destination, y = number, cilj = cilj)) + 
-  geom_col() + xlab("Cilj") + ylab("Število") + 
+                      aes(x = destination, y = number / 1000, cilj = cilj)) + 
+  geom_col() + xlab("Cilj") + ylab("Število (v tisočih)") + 
   ggtitle("Kdo v Slovenijo pride in kam Slovenec gre") + 
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 grafSloemig <- ggplotly(grafSloemig, tooltip = "cilj", width = 850)
 
-grafSlomig <- subplot(grafSloimig, grafSloemig, titleX = TRUE, titleY = TRUE, margin = 0.08) 
+grafSlomig <- subplot(grafSloimig, grafSloemig, titleX = TRUE, titleY = TRUE, margin = 0.08, shareY = TRUE) 
 
 grafSlostock <- ggplot(slovenijaStock %>% filter(age != "total") %>%
                          rename(Starost = age), 

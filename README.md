@@ -64,6 +64,7 @@ Za zagon tega projekta je potrebno namestiti sledeče pakete za R:
 * `StandardizeText` - za poenotenje imen držav
 * `readxl` - za branje excel datotek
 * `plotly` - za dodatno funkcionalnost grafov
+* `scales` - za lepšo notacijo na oseh grafov
 
 ## Binder
 

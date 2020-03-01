@@ -68,8 +68,8 @@ server <- function(input, output) {
           " glede na ",
           input$podatek,
           " (vsaka točka predstavlja eno državo sveta)  ")) +
-        geom_smooth(method = input$reg) + scale_x_log10() + 
-        scale_y_log10()
+        geom_smooth(method = input$reg) + scale_x_log10(labels = comma) + 
+        scale_y_log10(labels = comma) 
     }
     else if (length(x()) == 1) {
       if (x() == "x") {
@@ -81,7 +81,8 @@ server <- function(input, output) {
             " glede na ",
             input$podatek,
             " (vsaka točka predstavlja eno državo sveta)  ")) +
-          geom_smooth(method = input$reg) + scale_x_log10()
+          geom_smooth(method = input$reg) + scale_x_log10(labels = comma) + 
+          scale_y_continuous(labels = comma)
       }
       else {
         ggplot(pod, aes(x = pod[, input$podatek],
@@ -92,7 +93,8 @@ server <- function(input, output) {
             " glede na ",
             input$podatek,
             " (vsaka točka predstavlja eno državo sveta)  ")) +
-          geom_smooth(method = input$reg) + scale_y_log10()
+          geom_smooth(method = input$reg) + scale_y_log10(labels = comma) + 
+          scale_x_continuous(labels = comma)
       }
     }
     else {
@@ -104,7 +106,8 @@ server <- function(input, output) {
           " glede na ",
           input$podatek,
           " (vsaka točka predstavlja eno državo sveta)  ")) +
-        geom_smooth(method = input$reg)
+        geom_smooth(method = input$reg) + scale_x_continuous(labels = comma) + 
+        scale_y_continuous(labels = comma)
     }
   })
   output$grafk <- renderPlot(y())
