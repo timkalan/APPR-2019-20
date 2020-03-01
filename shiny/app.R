@@ -68,8 +68,8 @@ server <- function(input, output) {
           " glede na ",
           input$podatek,
           " (vsaka točka predstavlja eno državo sveta)  ")) +
-        geom_smooth(method = input$reg) + scale_x_log10(labels = comma) + 
-        scale_y_log10(labels = comma) 
+        geom_smooth(method = input$reg) + scale_x_log10(labels = comma_format(accuracy = .01)) + 
+        scale_y_log10(labels = comma_format(accuracy = .01)) 
     }
     else if (length(x()) == 1) {
       if (x() == "x") {
@@ -81,8 +81,8 @@ server <- function(input, output) {
             " glede na ",
             input$podatek,
             " (vsaka točka predstavlja eno državo sveta)  ")) +
-          geom_smooth(method = input$reg) + scale_x_log10(labels = comma) + 
-          scale_y_continuous(labels = comma)
+          geom_smooth(method = input$reg) + scale_x_log10(labels = comma_format(accuracy = .01)) + 
+          scale_y_continuous(labels = comma_format(accuracy = .01))
       }
       else {
         ggplot(pod, aes(x = pod[, input$podatek],
@@ -93,8 +93,8 @@ server <- function(input, output) {
             " glede na ",
             input$podatek,
             " (vsaka točka predstavlja eno državo sveta)  ")) +
-          geom_smooth(method = input$reg) + scale_y_log10(labels = comma) + 
-          scale_x_continuous(labels = comma)
+          geom_smooth(method = input$reg) + scale_y_log10(labels = comma_format(accuracy = .01)) + 
+          scale_x_continuous(labels = comma_format(accuracy = .01))
       }
     }
     else {
@@ -106,8 +106,8 @@ server <- function(input, output) {
           " glede na ",
           input$podatek,
           " (vsaka točka predstavlja eno državo sveta)  ")) +
-        geom_smooth(method = input$reg) + scale_x_continuous(labels = comma) + 
-        scale_y_continuous(labels = comma)
+        geom_smooth(method = input$reg) + scale_x_continuous(labels = comma_format(accuracy = .01)) + 
+        scale_y_continuous(labels = comma_format(accuracy = .01))
     }
   })
   output$grafk <- renderPlot(y())
